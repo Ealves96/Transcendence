@@ -1,0 +1,14 @@
+#pongCanvas {
+    width: 150vw;
+    height: 150vh;
+    display : block;
+    background-color: black;
+}
+
+#scoreboard {
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 20px;
+}

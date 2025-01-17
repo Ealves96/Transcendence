@@ -1,0 +1,25 @@
+/* Styles spécifiques pour la modal de connexion */
+#login-modal .modal-content {
+    background-color: #101728;
+    color: white;
+}
+
+#login-modal .form-label {
+    color: white;
+}
+
+#login-modal .form-control {
+    background-color: #1f2a38;
+    color: white;
+    border: 1px solid white;
+}
+
+#login-modal .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+#login-modal .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}

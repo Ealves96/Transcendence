@@ -1,0 +1,20 @@
+#rankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    font-family: 'Chau Philomene';
+}
+
+#rankingTable th, #rankingTable td {
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+}
+
+#rankingTable th {
+    background-color: #333;
+}
+
+#rankingTable td {
+    background-color: #222;
+}

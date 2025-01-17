@@ -1,0 +1,14 @@
+#chatBox {
+    width: 100%;
+    height: 400px;
+    background-color: #1f2a38;
+    border: 1px solid white;
+    color: white;
+    padding: 10px;
+    overflow-y: scroll;
+    font-family: 'Chau Philomene';
+}
+
+#chatBox p {
+    margin: 5px 0;
+}
