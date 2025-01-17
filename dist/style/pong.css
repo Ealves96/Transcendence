@@ -1,7 +1,9 @@
 #pongCanvas {
-    width: 150vw;
-    height: 150vh;
-    display : block;
+    width: 100vw; /* Largeur égale à la largeur de la fenêtre */
+    height: 56.25vw; /* Hauteur en fonction du ratio 16:9 */
+    max-height: 100vh; /* Ne pas dépasser la hauteur de la fenêtre */
+    display: block;
+    margin: 0 auto; /* Centrage horizontal */
     background-color: black;
 }
 
@@ -11,4 +13,12 @@
     font-size: 24px;
     font-family: 'Press Start 2P', cursive;
     margin-bottom: 20px;
+    animation: pulse 1.5s infinite;
 }
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
