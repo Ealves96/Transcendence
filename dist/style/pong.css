@@ -1,10 +1,23 @@
+/* #pong-game {
+    background: url('../img/fond tron.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    color: white; /* Pour que le texte reste lisible */
+    /*  */
+/* } */
+
 #pongCanvas {
-    width: 100vw; /* Largeur égale à la largeur de la fenêtre */
-    height: 56.25vw; /* Hauteur en fonction du ratio 16:9 */
-    max-height: 100vh; /* Ne pas dépasser la hauteur de la fenêtre */
-    display: block;
-    margin: 0 auto; /* Centrage horizontal */
-    background-color: black;
+    /* background: red !important; */
+    /* background: none !important; Retire le fond noir */
+    background-color: transparent !important; /* Rend le fond transparent */
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: url('../img/fond tron.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
 }
 
 #scoreboard {

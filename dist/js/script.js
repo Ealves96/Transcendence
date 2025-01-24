@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Afficher la modal de connexion automatiquement
             const modalElement = document.getElementById('login-modal');
             const loginModal = new bootstrap.Modal(modalElement, { backdrop: 'static', keyboard: false });
-            loginModal.show();
+            // loginModal.show(); //desactive l'affichage de la fenetre de connexion
         });
 });
 
@@ -35,7 +35,6 @@ function loadHTML(url, elementId) {
         })
         .catch(error => console.error('Error loading HTML:', error));
 }
-
 
 function loadSection(section) {
     const sectionMap = {

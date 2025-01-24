@@ -1,268 +1,337 @@
 let scene, camera, renderer, paddles, ball;
+let scores = { player1: 0, player2: 0 }; // Scores des deux joueurs
+let isGamePaused = false; // État d'arrêt du jeu
 
-//fonction qui initialise le jeu
 function initPongGame() {
-    console.log('Initialisation de initPongGame');
-    
-    const canvas = document.getElementById('pongCanvas');
+    console.log("Initialisation du Pong Game");
+
+    const canvas = document.getElementById("pongCanvas");
     if (!canvas) {
-        console.error('Canvas introuvable, initPongGame annulé.');
+        console.error("Canvas introuvable. Annulation de l'initialisation.");
         return;
     }
 
+    // Scène
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ canvas });
 
+    // Caméra légèrement inclinée
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.set(0, 25, 190); // Ajustement pour une vue plus horizontale
+    camera.lookAt(0, 0, 0);
+
+    // Renderer
+    renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true
+    });
+    renderer.setClearColor( 0x000000, 0 );
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
 
     // Lumières
     addLights(scene);
 
-    // Éléments de la scène
-    const floor = addFloor(scene);
+    // Terrain et éléments
+    addFloor(scene);
     paddles = addPaddles(scene);
     ball = addBall(scene);
     addWalls(scene);
-
     addNeonLines(scene);
-    const neonAmbientLight = new THREE.HemisphereLight(0x3333ff, 0x000033, 0.5);
-    scene.add(neonAmbientLight);
 
-    // Caméra
-    setupCamera(camera);
+    // Initialiser le tableau des scores
+    updateScoreBoard();
 
-    // Gestion des mouvements
+    // Configuration des mouvements
     setupPaddleMovement(paddles);
-    setupBallMovement(ball, paddles, floor);
+    setupBallMovement(ball);
 
-    console.log('Démarrage de l\'animation.');
+    console.log("Démarrage de l'animation...");
     animate();
 }
 
-//animations
 function animate() {
     requestAnimationFrame(animate);
 
-    // **Mouvements des paddles**
-    paddles.leftPaddle.position.z += paddles.leftPaddle.userData.speed;
-    paddles.rightPaddle.position.z += paddles.rightPaddle.userData.speed;
+    // Mise à jour des raquettes et de la balle
+    updatePaddlePositions();
+    updateBallPosition();
 
-    // Limites des paddles pour ne pas sortir du terrain
-    const maxZ = 13; // Ajustez selon la taille de votre terrain
-    const minZ = -13;
-    paddles.leftPaddle.position.z = Math.max(minZ, Math.min(maxZ, paddles.leftPaddle.position.z));
-    paddles.rightPaddle.position.z = Math.max(minZ, Math.min(maxZ, paddles.rightPaddle.position.z));
-
-    // **Mouvements de la balle**
-    ball.position.x += ball.userData.speed.x;
-    ball.position.z += ball.userData.speed.y;
-
-    // Collision avec les murs haut et bas (rebond vertical)
-    if (ball.position.z >= 14 || ball.position.z <= -14) {
-        ball.userData.speed.y *= -1; // Inverse la direction verticale
-    }
-
-    // Réinitialisation si la balle sort des limites (gauche/droite)
-    if (ball.position.x >= 25 || ball.position.x <= -25) {
-        ball.position.set(0, 0, 0); // Réinitialise la position
-        ball.userData.speed = { x: 0.2, y: 0.1 }; // Réinitialise la vitesse
-    }
-
-    // **Collisions balle/paddles**
-    const paddleWidth = 2;
-    const paddleHeight = 10;
-
-    // Collision avec la raquette gauche
-    if (
-        ball.position.x <= paddles.leftPaddle.position.x + paddleWidth &&
-        ball.position.x >= paddles.leftPaddle.position.x - paddleWidth &&
-        ball.position.z <= paddles.leftPaddle.position.z + paddleHeight / 2 &&
-        ball.position.z >= paddles.leftPaddle.position.z - paddleHeight / 2
-    ) {
-        ball.userData.speed.x *= -1; // Inverse la direction horizontale
-    }
-
-    // Collision avec la raquette droite
-    if (
-        ball.position.x <= paddles.rightPaddle.position.x + paddleWidth &&
-        ball.position.x >= paddles.rightPaddle.position.x - paddleWidth &&
-        ball.position.z <= paddles.rightPaddle.position.z + paddleHeight / 2 &&
-        ball.position.z >= paddles.rightPaddle.position.z - paddleHeight / 2
-    ) {
-        ball.userData.speed.x *= -1; // Inverse la direction horizontale
-    }
-
-    // **Rendu de la scène**
+    // Rendu de la scène
     renderer.render(scene, camera);
 }
 
-//fonction qui gere les lumieres
+// Lumières
 function addLights(scene) {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 20, 10);
-    directionalLight.castShadow = true;
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 100, 50);
+    directionalLight.castShadow = true; //active les ombres
+    directionalLight.shadow.mapSize.width = 1024; // Résolution des ombres
+    directionalLight.shadow.mapSize.height = 1024;// ++
+    directionalLight.shadow.camera.near = 0.5;//++
+    directionalLight.shadow.camera.far = 500;//++
     scene.add(directionalLight);
-
-    console.log('Lumières ajoutées à la scène.');
 }
 
-//fonction qui gere le sol
+// Terrain (prolongé pour un effet de profondeur)
 function addFloor(scene) {
-    const floorGeometry = new THREE.PlaneGeometry(50, 30);
+    const floorGeometry = new THREE.PlaneGeometry(60, 200);
     const floorMaterial = new THREE.MeshStandardMaterial({
-        color: 0x000000,         // Couleur noire
-        roughness: 0.1,          // Faible rugosité pour les reflets
-        metalness: 0.8,          // Haute métallisation
+        color: 0xffffff, // Couleur gris foncé pour vérifier
+        opacity: 0.5,    // Permet une certaine transparence
+        transparent: true, // Active la transparence
     });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -2;
-    floor.receiveShadow = true;
+    floor.rotation.x = -Math.PI / 2; // Place le sol à plat
+    floor.position.y = -3; // Position légèrement en dessous
+    floor.receiveShadow = true; // Active la réception des ombres
     scene.add(floor);
-
-    console.log('Sol ajouté à la scène.');
-    return floor;
 }
 
-//fonction qui gere les paddles
+
+// Raquettes
 function addPaddles(scene) {
-    const paddleGeometry = new THREE.BoxGeometry(2, 2, 10);
+    const paddleGeometry = new THREE.BoxGeometry(20, 3, 3);
     const paddleMaterial = new THREE.MeshStandardMaterial({
-        color: 0x0000ff,
-        emissive: 0x0000ff,
-        emissiveIntensity: 2, 
-        roughness: 0,
-        metalness: 1,
+        color: 0x00ff00,
+        emissive: 0x00ff00,
+        emissiveIntensity: 1.5,
     });
 
     const leftPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-    leftPaddle.position.set(-20, 0, 0);
+    leftPaddle.position.set(0, 0, 110); // Joueur proche
     leftPaddle.castShadow = true;
     scene.add(leftPaddle);
 
     const rightPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-    rightPaddle.position.set(20, 0, 0);
+    rightPaddle.position.set(0, 0, -110); // Adversaire éloigné
     rightPaddle.castShadow = true;
     scene.add(rightPaddle);
 
-    console.log('Raquettes ajoutées à la scène.');
     return { leftPaddle, rightPaddle };
 }
 
-//fonction qui gere la balle
+// Balle (part vers l'adversaire)
 function addBall(scene) {
     const ballGeometry = new THREE.SphereGeometry(2, 16, 16);
     const ballMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         emissive: 0xffffff,
-        emissiveIntensity: 2.5, // Effet néon plus intense
-        roughness: 0,
-        metalness: 1,
+        emissiveIntensity: 2,
     });
-    const ball = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 16), ballMaterial);
+    const ball = new THREE.Mesh(ballGeometry, ballMaterial);
     ball.position.set(0, 0, 0);
     ball.castShadow = true;
     scene.add(ball);
 
-    console.log('Balle ajoutée à la scène.');
+    // Direction initiale aléatoire (toujours vers l'adversaire)
+    ball.userData = {
+        speed: {
+            x: (Math.random() > 0.5 ? 0.5 : -0.5), // Aléatoire à gauche/droite
+            z: (Math.random() > 0.5 ? 0.7 : -0.7), // Toujours vers l'adversaire
+        },
+    };
     return ball;
 }
 
-//fonction qui gere la config de la camera
-function setupCamera(camera) {
-    camera.position.set(0, 15, 50);
-    camera.lookAt(0, 0, 0);
-    console.log('Caméra configurée.');
-}
-
-//fonction qui gere le mouvement des paddles
-function setupPaddleMovement(paddles) {
-    // Initialisation des vitesses des paddles
-    paddles.leftPaddle.userData = { speed: 0 };
-    paddles.rightPaddle.userData = { speed: 0 };
-
-    // Gestion des événements de clavier
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 's') paddles.leftPaddle.userData.speed = 0.5;
-        if (event.key === 'w') paddles.leftPaddle.userData.speed = -0.5;
-        if (event.key === '2') paddles.rightPaddle.userData.speed = 0.5;
-        if (event.key === '5') paddles.rightPaddle.userData.speed = -0.5;
+// Murs (haut et bas)
+function addWalls(scene) {
+    const wallMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0x111111,
+        emissiveIntensity: 1,
     });
 
-    document.addEventListener('keyup', (event) => {
-        if (event.key === 'w' || event.key === 's') paddles.leftPaddle.userData.speed = 0;
-        if (event.key === '5' || event.key === '2') paddles.rightPaddle.userData.speed = 0;
-    });
+    // Mur en haut
+    const wallGeometry = new THREE.BoxGeometry(1, 10, 240);
+    const topWall = new THREE.Mesh(wallGeometry, wallMaterial);
+    topWall.position.set(-40, 1, 0);
+    scene.add(topWall);
 
-    console.log('Mouvements des raquettes configurés.');
+    // Mur en bas
+    const bottomWall = new THREE.Mesh(wallGeometry, wallMaterial);
+    bottomWall.position.set(40, 1, 0);
+    scene.add(bottomWall);
 }
 
-//fonction qui gere le mouvement de la balle
-function setupBallMovement(ball, paddles, floor) {
-    let ballSpeed = { x: 0.2, y: 0.1 };
-
-    ball.userData = { speed: ballSpeed };
-
-    // Vous pouvez ajouter des collisions et des rebonds ici...
-    console.log('Mouvement de la balle configuré.');
-}
-
+// Lignes du terrain
 function addNeonLines(scene) {
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
 
     // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0.01, 15),
-        new THREE.Vector3(0, 0.01, -15),
+        new THREE.Vector3(-40, -2, 0),
+        new THREE.Vector3(40, -2, 0),
     ]);
     const centerLine = new THREE.Line(centerLineGeometry, lineMaterial);
     scene.add(centerLine);
 
-    // Bords du terrain
+    // Bordures du terrain haut et bas
     const borderGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-25, 0.01, 15),
-        new THREE.Vector3(25, 0.01, 15),
-        new THREE.Vector3(25, 0.01, -15),
-        new THREE.Vector3(-25, 0.01, -15),
-        new THREE.Vector3(-25, 0.01, 15),
+        new THREE.Vector3(-40, -2, 115),
+        new THREE.Vector3(40, -2, 115),
+        new THREE.Vector3(40, -2, -115),
+        new THREE.Vector3(-40, -2, -115),
+        new THREE.Vector3(-40, -2, 115),
     ]);
     const borderLine = new THREE.Line(borderGeometry, lineMaterial);
     scene.add(borderLine);
 }
 
-function addWalls(scene) {
-    const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff,        // Couleur blanche
-        emissive: 0xffffff,     // Lumière émise blanche
-        emissiveIntensity: 1,   // Intensité de l'effet néon
-        roughness: 0.3,         // Rugosité pour les reflets
-        metalness: 0.8,         // Apparence métallique
+// Mouvement des raquettes
+function setupPaddleMovement(paddles) {
+    paddles.leftPaddle.userData = { speed: 0 };
+    paddles.rightPaddle.userData = { speed: 0 };
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "a") paddles.leftPaddle.userData.speed = -0.8;
+        if (event.key === "d") paddles.leftPaddle.userData.speed = 0.8;
+        if (event.key === "1") paddles.rightPaddle.userData.speed = -0.8;
+        if (event.key === "3") paddles.rightPaddle.userData.speed = 0.8;
     });
 
-    // Mur gauche
-    const leftWallGeometry = new THREE.BoxGeometry(60, 2, 0); // (épaisseur, hauteur, longueur)
-    const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
-    leftWall.position.set(0, 5, -25); // Positionner sur le côté gauche (x, y, z)
-    leftWall.castShadow = true;
-    leftWall.receiveShadow = true;
-    leftWall.position.y = -2;
+    document.addEventListener("keyup", (event) => {
+        if (event.key === "a" || event.key === "d") paddles.leftPaddle.userData.speed = 0;
+        if (event.key === "1" || event.key === "3") paddles.rightPaddle.userData.speed = 0;
+    });
+}
 
-    // Mur droit
-    const rightWallGeometry = new THREE.BoxGeometry(36, 1, 0);
-    const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
-    rightWall.position.set(0, 5, 25); // Positionner sur le côté droit
-    rightWall.castShadow = true;
-    rightWall.receiveShadow = true;
-    rightWall.position.y = 4.5;
+// Mouvement de la balle
+function setupBallMovement(ball) {
+    ball.userData.speed = {
+        x: (Math.random() > 0.5 ? 0.6 : -0.6),
+        z: (Math.random() > 0.5 ? 0.8 : -0.8),
+    };
+}
 
-    // Ajouter les murs à la scène
-    scene.add(leftWall);
-    scene.add(rightWall);
+// Fonction pour limiter la vitesse de la balle
+function limitBallSpeed(ball) {
+    const maxSpeed = 1.2; // Vitesse maximale autorisée
+    ball.userData.speed.x = Math.max(-maxSpeed, Math.min(maxSpeed, ball.userData.speed.x));
+    ball.userData.speed.z = Math.max(-maxSpeed, Math.min(maxSpeed, ball.userData.speed.z));
+}
 
-    console.log('Murs ajoutés à la scène.');
+
+function updatePaddlePositions() {
+    paddles.leftPaddle.position.x += paddles.leftPaddle.userData.speed;
+    paddles.rightPaddle.position.x += paddles.rightPaddle.userData.speed;
+
+    const limitX = 26; // Limites des raquettes
+    paddles.leftPaddle.position.x = Math.max(-limitX, Math.min(limitX, paddles.leftPaddle.position.x));
+    paddles.rightPaddle.position.x = Math.max(-limitX, Math.min(limitX, paddles.rightPaddle.position.x));
+}
+
+function updateBallPosition() {
+    ball.position.x += ball.userData.speed.x;
+    ball.position.z += ball.userData.speed.z;
+
+    // Collision avec les murs gauche et droite
+    if (ball.position.x > 35 || ball.position.x < -35) {
+        ball.userData.speed.x *= -1; // Inversion de la direction horizontale
+    }
+
+    //POUR COMPTER LES POINTS SE SERVIR DE CA
+    // Collision avec les murs haut et bas (si nécessaire)
+    // if (ball.position.z > 50 || ball.position.z < -50) {
+    //     ball.userData.speed.z *= -1; // Inversion de la direction verticale
+    // }
+
+    // Collision avec la raquette du joueur
+    if (
+        ball.position.z > paddles.leftPaddle.position.z - 2 &&
+        ball.position.z < paddles.leftPaddle.position.z + 1 &&
+        ball.position.x >= paddles.leftPaddle.position.x - 10 &&
+        ball.position.x <= paddles.leftPaddle.position.x + 10
+    ) {
+        ball.userData.speed.z *= -1; // Rebond sur la raquette
+        ball.userData.speed.x += (ball.position.x - paddles.leftPaddle.position.x) * 0.1; // Angle
+        limitBallSpeed(ball); // Limite la vitesse après le rebond
+        return;
+    }
+
+    // Collision avec la raquette de l'adversaire
+    if (
+        ball.position.z > paddles.rightPaddle.position.z - 2 &&
+        ball.position.z < paddles.rightPaddle.position.z + 1 &&
+        ball.position.x >= paddles.rightPaddle.position.x - 10 &&
+        ball.position.x <= paddles.rightPaddle.position.x + 10
+    ) {
+        ball.userData.speed.z *= -1; // Rebond sur la raquette
+        ball.userData.speed.x += (ball.position.x - paddles.rightPaddle.position.x) * 0.1; // Angle
+        limitBallSpeed(ball); // Limite la vitesse après le rebond
+        return;
+    }
+
+    // Gestion des angles (collision combinée avec la raquette et le mur)
+    if (
+        (ball.position.x >= 40 || ball.position.x <= -40) && // Mur gauche/droite
+        ((ball.position.z > paddles.leftPaddle.position.z - 1 &&
+            ball.position.z < paddles.leftPaddle.position.z + 1) ||
+            (ball.position.z > paddles.rightPaddle.position.z - 1 &&
+            ball.position.z < paddles.rightPaddle.position.z + 1))
+    ) {
+        ball.userData.speed.z *= -1; // Rebond sur la raquette
+        ball.userData.speed.x *= -1; // Rebond sur le mur en simultané
+        limitBallSpeed(ball); // Limite la vitesse après le rebond
+    }
+
+    // Réinitialisation si la balle dépasse les limites
+    if (ball.position.z > 126) { // La balle passe derrière le joueur 1
+        scores.player2 += 1; // Point pour le joueur 2
+        updateScoreBoard();
+        checkForWinner();
+        resetBall('player2');
+        return;
+    }
+
+    if (ball.position.z < -126) { // La balle passe derrière le joueur 2
+        scores.player1 += 1; // Point pour le joueur 1
+        updateScoreBoard();
+        checkForWinner();
+        resetBall('player1');
+        return;
+    }
+}
+
+function resetBall(lastScorer) {
+    isGamePaused = true; // Met le jeu en pause
+   
+    // Centre les paddles
+    paddles.leftPaddle.position.set(0, 0, 115);
+    paddles.rightPaddle.position.set(0, 0, -100);
+
+    // Positionne la balle devant le paddle adverse
+    ball.position.set(0, 0, lastScorer === 'player1' ? -90 : 110);
+    ball.userData.speed = { x: 0, z: 0 }; // Stoppe la balle
+
+    document.addEventListener('keydown', function handleSpace(event) {
+        if (event.code === 'Space') {
+            setupBallMovement(ball); // Relance la balle
+            isGamePaused = false;
+            document.removeEventListener('keydown', handleSpace); // Supprime l'écouteur
+        }
+    });
+}
+
+function resetGame() {
+    scores = { player1: 0, player2: 0 }; // Réinitialise les scores
+    resetBall('player1'); // Place la balle pour le joueur 1
+}
+
+function checkForWinner() {
+    if (scores.player1 >= 5) {
+        alert("Le joueur 1 a gagné !");
+        resetGame();
+    } else if (scores.player2 >= 5) {
+        alert("Le joueur 2 a gagné !");
+        resetGame();
+    }
+}
+
+function updateScoreBoard() {
+    const scoreBoard = document.getElementById('scoreBoard');
+    scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
 }
