@@ -80,7 +80,7 @@ function addLights(scene) {
 function addFloor(scene) {
     const floorGeometry = new THREE.PlaneGeometry(60, 200);
     const floorMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff, // Couleur gris foncé pour vérifier
+        color: 0x33ccff, // Couleur gris foncé pour vérifier
         opacity: 0.5,    // Permet une certaine transparence
         transparent: true, // Active la transparence
     });
