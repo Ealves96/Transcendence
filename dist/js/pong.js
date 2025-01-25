@@ -78,17 +78,28 @@ function addLights(scene) {
 
 // Terrain (prolongé pour un effet de profondeur)
 function addFloor(scene) {
-    const floorGeometry = new THREE.PlaneGeometry(60, 200);
-    const floorMaterial = new THREE.MeshStandardMaterial({
-        color: 0x33ccff, // Couleur gris foncé pour vérifier
-        opacity: 0.5,    // Permet une certaine transparence
-        transparent: true, // Active la transparence
-    });
-    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.rotation.x = -Math.PI / 2; // Place le sol à plat
-    floor.position.y = -3; // Position légèrement en dessous
-    floor.receiveShadow = true; // Active la réception des ombres
-    scene.add(floor);
+    const textureLoader = new THREE.TextureLoader();
+
+    // Charge une texture bleu foncé
+	const floorTexture = textureLoader.load('../img/fond_bleu.jpg');
+	floorTexture.wrapS = THREE.RepeatWrapping;
+	floorTexture.wrapT = THREE.RepeatWrapping;
+	floorTexture.repeat.set(10, 10); // Répétition pour l'effet de profondeur
+
+	const floorMaterial = new THREE.MeshStandardMaterial({
+		map: floorTexture, // Applique la texture
+		emissive: 0x00008b, // Bleu foncé pour l'émission
+		emissiveIntensity: 1.0, // Intensité d'émission
+		transparent: true,
+		opacity: 0.8,
+	});
+
+	const floorGeometry = new THREE.PlaneGeometry(60, 200);
+	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	floor.rotation.x = -Math.PI / 2; // Place le sol à plat
+	floor.position.y = -3; // Position légèrement en dessous
+	floor.receiveShadow = true; // Active la réception des ombres
+	scene.add(floor);
 }
 
 
@@ -140,23 +151,23 @@ function addBall(scene) {
 // Murs (gauche et droit)
 function addWalls(scene) {
     const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0x0080ff, // Bleu néon principal
+        color: 0x00ffff, // Bleu néon
 		emissive: 0x00ffff, // Lumière émise par l'objet
-		emissiveIntensity: 1.5, // Intensité de la lumière
-		metalness: 0.8,
-		roughness: 0.2,
+		emissiveIntensity: 2.0, // Intensité LED
+		metalness: 1.0, // Métallique pour refléter la lumière
+		roughness: 0.1, // Surface lisse
     });
 
     // Mur gauche
     const wallGeometry = new THREE.BoxGeometry(3, 0, 247);
-    const topWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    topWall.position.set(-35, 1, 0);
-    scene.add(topWall);
+    const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+    leftWall.position.set(-35, 1, 0);
+    scene.add(leftWall);
 
     // Mur droit
-    const bottomWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    bottomWall.position.set(35, 1, 0);
-    scene.add(bottomWall);
+    const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+    rightWall.position.set(35, 1, 0);
+    scene.add(rightWall);
 }
 
 // Lignes du terrain
