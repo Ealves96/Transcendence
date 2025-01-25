@@ -137,29 +137,31 @@ function addBall(scene) {
     return ball;
 }
 
-// Murs (haut et bas)
+// Murs (gauche et droit)
 function addWalls(scene) {
     const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: 0x111111,
-        emissiveIntensity: 1,
+        color: 0x0080ff, // Bleu néon principal
+		emissive: 0x00ffff, // Lumière émise par l'objet
+		emissiveIntensity: 1.5, // Intensité de la lumière
+		metalness: 0.8,
+		roughness: 0.2,
     });
 
-    // Mur en haut
-    const wallGeometry = new THREE.BoxGeometry(1, 10, 240);
+    // Mur gauche
+    const wallGeometry = new THREE.BoxGeometry(3, 0, 247);
     const topWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    topWall.position.set(-40, 1, 0);
+    topWall.position.set(-35, 1, 0);
     scene.add(topWall);
 
-    // Mur en bas
+    // Mur droit
     const bottomWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    bottomWall.position.set(40, 1, 0);
+    bottomWall.position.set(35, 1, 0);
     scene.add(bottomWall);
 }
 
 // Lignes du terrain
 function addNeonLines(scene) {
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 3 });
 
     // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([

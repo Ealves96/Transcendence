@@ -1,21 +1,35 @@
-/* #pong-game {
-    background: url('../img/fond tron.jpeg') no-repeat center center fixed;
-    background-size: cover;
-    color: white; /* Pour que le texte reste lisible */
-    /*  */
-/* } */
-
-#pongCanvas {
-    /* background: red !important; */
-    /* background: none !important; Retire le fond noir */
-    background-color: transparent !important; /* Rend le fond transparent */
+#pong-game {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
     width: 100%;
     height: 100%;
+    position: relative;
+    overflow: hidden; /* Empêche les débordements */
+    margin: 0;
+    padding: 0;
+}
+
+#pongCanvas {
+    width: 100vw; /* Occupe 100% de la largeur de la fenêtre */
+    height: 100vh; /* Occupe 100% de la hauteur de la fenêtre */
+    background: none; /* Pas de fond */
+    background-color: transparent; /* Transparence */
+    display: block; /* Retire les espaces autour */
+}
+
+html, body {
+    overflow: hidden; /* Empêche le défilement */
+    width: 100%; /* Assure que la largeur occupe tout l'écran */
+    height: 100%; /* Assure que la hauteur occupe tout l'écran */
+    margin: 0; /* Supprime les marges externes */
+    padding: 0; /* Supprime les espaces internes */
 }
 
 body {
     background: url('../img/fond tron.jpeg') no-repeat center center fixed;
     background-size: cover;
+	background-position: calc(50% + 33px) center;;
     margin: 0;
     padding: 0;
 }
