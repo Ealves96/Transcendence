@@ -81,7 +81,7 @@ function addFloor(scene) {
     const textureLoader = new THREE.TextureLoader();
 
     // Charge une texture bleu foncé
-	const floorTexture = textureLoader.load('../img/fond_bleu.jpg');
+	const floorTexture = textureLoader.load('./img/fond_bleu.jpg');
 	floorTexture.wrapS = THREE.RepeatWrapping;
 	floorTexture.wrapT = THREE.RepeatWrapping;
 	floorTexture.repeat.set(10, 10); // Répétition pour l'effet de profondeur
