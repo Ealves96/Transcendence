@@ -34,14 +34,53 @@ body {
     padding: 0;
 }
 
-#scoreboard {
-    text-align: center;
-    color: white;
-    font-size: 24px;
-    font-family: 'Press Start 2P', cursive;
-    margin-bottom: 20px;
-    animation: pulse 1.5s infinite;
+/* #scoreBoard {
+    font-family: 'TRON', sans-serif; /* Police TRON */
+    /* font-size: 50px; Ajuster selon la taille souhaitée */
+    /* color: white; Couleur par défaut */
+    /* text-align: center; Centre le texte */
+    /* white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    /* position: absolute; Position absolue */
+    /* top: 10px; Distance par rapport au haut */
+    /* left: 0; Aligne à gauche */
+    /* width: 1000vw; Utilise toute la largeur de la fenêtre */
+    /* overflow: visible; Assure que rien n'est coupé */
+    /* z-index: 10; Assure que l'élément est visible */ 
+/* } */
+
+/* .score { */
+    /* text-shadow: 
+        0 0 5px #0ff, 
+        0 0 10px #0ff, 
+        0 0 20px #0ff, 
+        0 0 40px cyan, 
+        0 0 80px cyan;
+/* } */
+
+#player1 {
+    color: blue; 
 }
+
+#player2 {
+    color: red;
+} 
+
+/* #spacer { */
+    /* display: inline-block; Séparation entre Joueur 1 et Joueur 2 */
+    /* width: 300px; Ajuster pour plus ou moins d'espace */
+/* }  */
+
+@media screen and (max-width: 900px) {
+    #scoreBoard {
+        font-size: 30px; /* Taille réduite pour les petits écrans */
+    }
+}
+
+@font-face {
+    font-family: 'TronFont';
+    src: url('../fonts/Chau_Philomene_One/Tron-JOAa.ttf') format('truetype');;
+}
+
 
 @keyframes pulse {
     0% { transform: scale(1); }

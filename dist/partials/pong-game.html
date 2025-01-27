@@ -1,30 +1,83 @@
-<section id="pong-game" style="text-align: center; margin-top: 20px;">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game TRON Style</title>
+    <style>
+        @font-face {
+            font-family: 'TronFont';
+            src: url('fonts/tron-font.ttf') format('truetype');
+        }
 
-    <!-- Tableau des scores -->
-    <!-- <div id="scoreboard" style="
-        color: white;
-        font-size: 30px;
-        margin-bottom: 20px;
-        font-family: 'Press Start 2P', cursive;
-    ">
-        0 - 0
-    </div> -->
+        body {
+            margin: 0;
+            background-color: #000; /* Fond noir */
+            overflow: hidden;
+        }
 
-    <!-- Canvas pour le jeu Pong -->
-    <canvas id="pongCanvas" style="width: 100%; height: 700px; background: none;"
-    ></canvas>
-</section>
+        #scoreBoard {
+            font-family: 'TronFont', sans-serif; /* Utilise la police TRON */
+            font-size: 40px; /* Taille du texte */
+            color: cyan; /* Couleur du texte */
+            text-shadow: 
+                0 0 5px #0ff, 
+                0 0 10px #0ff, 
+                0 0 20px #0ff, 
+                0 0 40px cyan, 
+                0 0 80px cyan; /* Effet lumineux */
+            text-align: center; /* Centre le texte */
+            position: fixed; /* Permet de positionner */
+            top: 255px; /* Distance du haut */
+            left: 50.5%; /* Centre horizontalement */
+            width: 100%; /* Largeur de 100% */
+            transform: translateX(-50%); /* Ajustement centré */
+        }
 
-<style>
-@keyframes rainbowText {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-}
-</style>
+        #pongCanvas {
+            /* display: none; */
+            margin: 0 auto;
+            background-color: none;
+            /* border: 2px solid white; */
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <section id="pong-game">
+        <div id="scoreBoard">
+            <div class="player">
+                <span class="player-name">Joueur 1</span>
+                <span class="player-name">Joueur 2</span>
+            </div>
+            <div class="score">
+                <span class="player-score">0</span>
+                <span class="player-score">0</span>
+            </div>
+        </div>
+        <canvas id="pongCanvas"></canvas>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logique pour mettre à jour les scores
+            const scores = { player1: 0, player2: 0 };
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        initPongGame();
-    });
-</script>
+    setInterval(() => {
+        scores.player1 += Math.floor(Math.random() * 2);
+        scores.player2 += Math.floor(Math.random() * 2);
 
+        updateScoreBoard(scores.player1, scores.player2);
+    }, 2000);
+
+    function updateScoreBoard(player1, player2) {
+        const player1Span = document.getElementById('player1');
+        const player2Span = document.getElementById('player2');
+        
+        player1Span.innerText = `Joueur 1 : ${player1}`;
+        player2Span.innerText = `Joueur 2 : ${player2}`;
+    }
+        });
+    </script>
+</body>
+</html>

@@ -202,13 +202,13 @@ function setupPaddleMovement(paddles) {
     document.addEventListener("keydown", (event) => {
         if (event.key === "a") paddles.leftPaddle.userData.speed = -0.8;
         if (event.key === "d") paddles.leftPaddle.userData.speed = 0.8;
-        if (event.key === "1") paddles.rightPaddle.userData.speed = -0.8;
-        if (event.key === "3") paddles.rightPaddle.userData.speed = 0.8;
+        if (event.key === 'ArrowLeft') paddles.rightPaddle.userData.speed = -0.8;
+        if (event.key === 'ArrowRight') paddles.rightPaddle.userData.speed = 0.8;
     });
 
     document.addEventListener("keyup", (event) => {
         if (event.key === "a" || event.key === "d") paddles.leftPaddle.userData.speed = 0;
-        if (event.key === "1" || event.key === "3") paddles.rightPaddle.userData.speed = 0;
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') paddles.rightPaddle.userData.speed = 0;
     });
 }
 
@@ -346,5 +346,5 @@ function checkForWinner() {
 
 function updateScoreBoard() {
     const scoreBoard = document.getElementById('scoreBoard');
-    scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
+    // scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
 }
