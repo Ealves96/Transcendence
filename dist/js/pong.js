@@ -218,8 +218,8 @@ function addNeonLines(scene) {
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff, linewidth: 3 });
 
     // Récupération des dimensions du sol
-    const floorWidth = 80;  // Même largeur que le sol
-    const floorDepth = 200; // Même profondeur que le sol
+    const floorWidth = 70;  // Même largeur que le sol
+    const floorDepth = 170; // Même profondeur que le sol
     const floorY = 1; // Même hauteur que le sol
 
     // Inclinaison du sol
@@ -232,21 +232,23 @@ function addNeonLines(scene) {
     const adjustedDepthBack = -floorDepth / 2 * cosAngle; // Ajuste la ligne arrière
     const adjustedHeightBack = floorDepth / 2 * sinAngle + floorY; // Ajuste la hauteur arrière
 
+    const offsetZ = 40; // Décalage pour centrer les lignes
+
     // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(floorWidth / 2, floorY * 15, 0),
-        new THREE.Vector3(-floorWidth / 2, floorY * 15, 0),
+        new THREE.Vector3(floorWidth / 1.85, floorY * 18, 0),
+        new THREE.Vector3(-floorWidth / 1.85, floorY * 18, 0),
     ]);
     const centerLine = new THREE.Line(centerLineGeometry, lineMaterial);
     scene.add(centerLine);
 
     // Bordures du terrain (exactement alignées avec le sol)
     const borderGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront), // Avant gauche
-        new THREE.Vector3(floorWidth / 2, floorY, adjustedDepthFront),  // Avant droite
-        new THREE.Vector3(floorWidth / 2, adjustedHeightBack, adjustedDepthBack), // Arrière droite
-        new THREE.Vector3(-floorWidth / 2, adjustedHeightBack, adjustedDepthBack), // Arrière gauche
-        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront), // Retour à avant gauche
+        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront + offsetZ), // Avant gauche
+        new THREE.Vector3(floorWidth / 2,floorY, adjustedDepthFront + offsetZ),  // Avant droite
+        new THREE.Vector3(floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière droite
+        new THREE.Vector3(-floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière gauche
+        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront + offsetZ), // Retour à avant gauche
     ]);
     const borderLine = new THREE.Line(borderGeometry, lineMaterial);
     scene.add(borderLine);
