@@ -94,10 +94,10 @@ function addFloor(scene) {
 		opacity: 0.8,
 	});
 
-	const floorGeometry = new THREE.PlaneGeometry(60, 200);
+	const floorGeometry = new THREE.PlaneGeometry(80, 200);
 	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	floor.rotation.x = -Math.PI / 2; // Place le sol à plat
-	floor.position.y = -3; // Position légèrement en dessous
+	floor.rotation.x = -Math.PI / 2.3; // Place le sol à plat
+	floor.position.y = 15; // Position légèrement en dessous
 	floor.receiveShadow = true; // Active la réception des ombres
 	scene.add(floor);
 }
@@ -152,23 +152,40 @@ function addBall(scene) {
 function addWalls(scene) {
     const wallMaterial = new THREE.MeshStandardMaterial({
         color: 0x00ffff, // Bleu néon
-		emissive: 0x00ffff, // Lumière émise par l'objet
-		emissiveIntensity: 2.0, // Intensité LED
-		metalness: 1.0, // Métallique pour refléter la lumière
-		roughness: 0.1, // Surface lisse
+        emissive: 0x00ffff, // Lumière émise par l'objet
+        emissiveIntensity: 2.0, // Intensité LED
+        metalness: 1.0, // Métallique pour refléter la lumière
+        roughness: 0.1, // Surface lisse
     });
 
-    // Mur gauche
-    const wallGeometry = new THREE.BoxGeometry(3, 0, 247);
-    const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    leftWall.position.set(-35, 1, 0);
+    // Dimensions du terrain
+    const terrainLength = 2; // Longueur du terrain (Z)
+    const wallThickness = 2; // Épaisseur des murs
+    const wallHeight = 198; // Hauteur des murs (doit être bien visible)
+
+    // Mur gauche (le long du terrain, axe Z)
+    const leftWall = new THREE.Mesh(
+        new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength), // Épaisseur, Hauteur, Longueur
+        wallMaterial
+    );
+    leftWall.position.set(-42, 15, 0); // Positionné sur le bord gauche
+    leftWall.rotation.x = -Math.PI / 2.3; // Suivre l'angle du terrain
     scene.add(leftWall);
 
-    // Mur droit
-    const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
-    rightWall.position.set(35, 1, 0);
+    // Mur droit (le long du terrain, axe Z)
+    const rightWall = new THREE.Mesh(
+        new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength),
+        wallMaterial
+    );
+    rightWall.position.set(42, 15, 0); // Positionné sur le bord droit
+    rightWall.rotation.x = -Math.PI / 2.3; // Suivre l'angle du terrain
     scene.add(rightWall);
 }
+
+
+
+
+
 
 // Lignes du terrain
 function addNeonLines(scene) {
@@ -346,5 +363,5 @@ function checkForWinner() {
 
 function updateScoreBoard() {
     const scoreBoard = document.getElementById('scoreBoard');
-    // scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
+    scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
 }

@@ -27,9 +27,9 @@ html, body {
 }
 
 body {
-    background: url('../img/fond tron.jpeg') no-repeat center center fixed;
+    background: url('../img/fond_2.gif') no-repeat center center fixed;
     background-size: cover;
-	background-position: calc(50% + 33px) center;;
+	background-position: center;
     margin: 0;
     padding: 0;
 }
