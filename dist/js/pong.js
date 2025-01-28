@@ -149,68 +149,109 @@ function addBall(scene) {
     return ball;
 }
 
-// Murs (gauche et droit)
+// Murs gauche et droite
 function addWalls(scene) {
-    const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0x00ffff, // Bleu néon
-        emissive: 0x00ffff, // Lumière émise par l'objet
-        emissiveIntensity: 2.0, // Intensité LED
-        metalness: 1.0, // Métallique pour refléter la lumière
-        roughness: 0.1, // Surface lisse
+    const neonColor = new THREE.Color(0x00ffff); // Bleu néon
+    const emissiveColor = new THREE.Color("rgb(253, 253, 253)"); // Lumière émise
+
+    // Matériau principal des murs (LED brillants)
+    const wallMaterial = new THREE.MeshBasicMaterial({
+        color: neonColor, // Bleu néon
+        emissive: emissiveColor, // Lumière émise
+        emissiveIntensity: 5.0, // Très intense
+        transparent: true,
+        opacity: 0.9, // Un peu de transparence pour effet LED
+    });
+
+    // Effet de lumière diffusée autour des murs
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: neonColor,
+        transparent: true,
+        opacity: 0.5, // Transparence pour effet "halo"
     });
 
     // Dimensions du terrain
-    const terrainLength = 2; // Longueur du terrain (Z)
+    const terrainLength = 3; // Profondeur du terrain (Z)
     const wallThickness = 2; // Épaisseur des murs
-    const wallHeight = 198; // Hauteur des murs (doit être bien visible)
+    const wallHeight = 198; // Hauteur des murs
 
-    // Mur gauche (le long du terrain, axe Z)
+    // Création des murs
     const leftWall = new THREE.Mesh(
-        new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength), // Épaisseur, Hauteur, Longueur
+        new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength),
         wallMaterial
     );
-    leftWall.position.set(-42, 15, 0); // Positionné sur le bord gauche
+    leftWall.position.set(-42, 15, 0);
     leftWall.rotation.x = -Math.PI / 2.3; // Suivre l'angle du terrain
     scene.add(leftWall);
 
-    // Mur droit (le long du terrain, axe Z)
+    // Mur droit
     const rightWall = new THREE.Mesh(
         new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength),
         wallMaterial
     );
-    rightWall.position.set(42, 15, 0); // Positionné sur le bord droit
-    rightWall.rotation.x = -Math.PI / 2.3; // Suivre l'angle du terrain
+    rightWall.position.set(42, 15, 0);
+    rightWall.rotation.x = -Math.PI / 2.3;
     scene.add(rightWall);
+
+    // Ajouter un effet de "halo" lumineux en dupliquant les murs avec une transparence
+    const leftGlow = new THREE.Mesh(
+        new THREE.BoxGeometry(wallThickness * 1.5, wallHeight * 1, terrainLength * 1.5),
+        glowMaterial
+    );
+    leftGlow.position.set(-42, 15, 0);
+    leftGlow.rotation.x = -Math.PI / 2.3;
+    scene.add(leftGlow);
+
+    const rightGlow = new THREE.Mesh(
+        new THREE.BoxGeometry(wallThickness * 1.5, wallHeight * 1, terrainLength * 1.5),
+        glowMaterial
+    );
+    rightGlow.position.set(42, 15, 0);
+    rightGlow.rotation.x = -Math.PI / 2.3;
+    scene.add(rightGlow);
+
+    console.log("Murs LED ajoutés avec effet lumineux.");
 }
-
-
-
-
-
 
 // Lignes du terrain
 function addNeonLines(scene) {
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 3 });
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff, linewidth: 3 });
+
+    // Récupération des dimensions du sol
+    const floorWidth = 80;  // Même largeur que le sol
+    const floorDepth = 200; // Même profondeur que le sol
+    const floorY = 1; // Même hauteur que le sol
+
+    // Inclinaison du sol
+    const floorAngle = -Math.PI / -8;
+    const sinAngle = Math.sin(floorAngle);
+    const cosAngle = Math.cos(floorAngle);
+
+    // Ajustement de la profondeur des lignes selon l'inclinaison
+    const adjustedDepthFront = floorDepth / 2 * cosAngle; // Ajuste la ligne avant
+    const adjustedDepthBack = -floorDepth / 2 * cosAngle; // Ajuste la ligne arrière
+    const adjustedHeightBack = floorDepth / 2 * sinAngle + floorY; // Ajuste la hauteur arrière
 
     // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-40, -2, 0),
-        new THREE.Vector3(40, -2, 0),
+        new THREE.Vector3(-floorWidth / 2, floorY, 0),
+        new THREE.Vector3(floorWidth / 2, floorY, 0),
     ]);
     const centerLine = new THREE.Line(centerLineGeometry, lineMaterial);
     scene.add(centerLine);
 
-    // Bordures du terrain haut et bas
+    // Bordures du terrain (exactement alignées avec le sol)
     const borderGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-40, -2, 115),
-        new THREE.Vector3(40, -2, 115),
-        new THREE.Vector3(40, -2, -115),
-        new THREE.Vector3(-40, -2, -115),
-        new THREE.Vector3(-40, -2, 115),
+        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront), // Avant gauche
+        new THREE.Vector3(floorWidth / 2, floorY, adjustedDepthFront),  // Avant droite
+        new THREE.Vector3(floorWidth / 2, adjustedHeightBack, adjustedDepthBack), // Arrière droite
+        new THREE.Vector3(-floorWidth / 2, adjustedHeightBack, adjustedDepthBack), // Arrière gauche
+        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront), // Retour à avant gauche
     ]);
     const borderLine = new THREE.Line(borderGeometry, lineMaterial);
     scene.add(borderLine);
 }
+
 
 // Mouvement des raquettes
 function setupPaddleMovement(paddles) {
