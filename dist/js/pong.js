@@ -244,11 +244,11 @@ function addNeonLines(scene) {
 
     // Bordures du terrain (exactement alignées avec le sol)
     const borderGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront + offsetZ), // Avant gauche
-        new THREE.Vector3(floorWidth / 2,floorY, adjustedDepthFront + offsetZ),  // Avant droite
+        new THREE.Vector3(-floorWidth / 2.2, floorY, adjustedDepthFront + offsetZ), // Avant gauche
+        new THREE.Vector3(floorWidth / 2.1,floorY, adjustedDepthFront + offsetZ),  // Avant droite
         new THREE.Vector3(floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière droite
         new THREE.Vector3(-floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière gauche
-        new THREE.Vector3(-floorWidth / 2, floorY, adjustedDepthFront + offsetZ), // Retour à avant gauche
+        new THREE.Vector3(-floorWidth / 2.2, floorY, adjustedDepthFront + offsetZ), // Retour à avant gauche
     ]);
     const borderLine = new THREE.Line(borderGeometry, lineMaterial);
     scene.add(borderLine);
