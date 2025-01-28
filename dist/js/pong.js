@@ -78,17 +78,18 @@ function addLights(scene) {
 
 // Terrain (prolongé pour un effet de profondeur)
 function addFloor(scene) {
-    const textureLoader = new THREE.TextureLoader();
+    // const textureLoader = new THREE.TextureLoader();
 
     // Charge une texture bleu foncé
-	const floorTexture = textureLoader.load('./img/fond_bleu.jpg');
-	floorTexture.wrapS = THREE.RepeatWrapping;
-	floorTexture.wrapT = THREE.RepeatWrapping;
-	floorTexture.repeat.set(10, 10); // Répétition pour l'effet de profondeur
+	// const floorTexture = textureLoader.load('./img/fond_bleu.jpg');
+	// floorTexture.wrapS = THREE.RepeatWrapping;
+	// floorTexture.wrapT = THREE.RepeatWrapping;
+	// floorTexture.repeat.set(10, 10); // Répétition pour l'effet de profondeur
 
 	const floorMaterial = new THREE.MeshStandardMaterial({
-		map: floorTexture, // Applique la texture
-		emissive: 0x00008b, // Bleu foncé pour l'émission
+		// map: floorTexture, // Applique la texture
+        color: new THREE.Color("rgb(15, 7, 59)"),
+		emissive: new THREE.Color("rgb(3, 3, 3)"), // Bleu foncé pour l'émission
 		emissiveIntensity: 1.0, // Intensité d'émission
 		transparent: true,
 		opacity: 0.8,
