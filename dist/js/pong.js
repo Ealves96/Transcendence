@@ -234,8 +234,8 @@ function addNeonLines(scene) {
 
     // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-floorWidth / 2, floorY, 0),
-        new THREE.Vector3(floorWidth / 2, floorY, 0),
+        new THREE.Vector3(floorWidth / 2, floorY * 15, 0),
+        new THREE.Vector3(-floorWidth / 2, floorY * 15, 0),
     ]);
     const centerLine = new THREE.Line(centerLineGeometry, lineMaterial);
     scene.add(centerLine);
