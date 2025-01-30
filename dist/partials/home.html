@@ -12,11 +12,13 @@
     </div>
 </section>
 
+<!-- Vidéo de fond -->
+<video autoplay loop muted playsinline class="video-background">
+    <source src="https://cdn.pixabay.com/video/2023/07/24/173104-848555587_large.mp4" type="video/mp4">
+</video>
+
+
 <style>
-body {
-    background: url('https://cdn.pixabay.com/video/2024/08/18/227152_large.mp4') no-repeat center center fixed;
-    background-size: cover;
-}
 
 #home-screen {
     display: flex;
@@ -48,23 +50,26 @@ button:disabled {
     background: gray;
 }
 </style>
+	
+<!-- <script>
+	function startGame(mode) {
+    console.log("Mode sélectionné :", mode);
 
-<script>
-function startGame(mode) {
-    if (mode === 'solo') {
-        loadSection('pong-game')
-            .then(() => {
-                console.log("Chargement du Pong solo...");
-                try {
-                    initPongGame(); // Lance le jeu après le chargement
-                } catch (error) {
-                    console.error("Erreur lors du lancement du Pong solo:", error);
-                }
-            });
-    } else if (mode === 'duo') {
-        alert("Le mode 2 joueurs n'est pas encore disponible !");
-    } else {
-        alert("Mode multijoueur en cours de développement !");
-    }
+    // Afficher l'écran de chargement
+    const loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.classList.add("show");
+
+    setTimeout(() => {
+        if (mode === 'solo') {
+            loadSection('pong-game'); // Ne pas utiliser `.then()`
+        } else if (mode === 'duo') {
+            alert("Le mode 2 joueurs n'est pas encore disponible !");
+            loadingScreen.classList.remove("show"); // Masquer le loading si pas de jeu
+        } else {
+            alert("Mode multijoueur en cours de développement !");
+            loadingScreen.classList.remove("show"); // Masquer le loading si pas de jeu
+        }
+    }, 1000); // Temps d'affichage du loading avant de charger le jeu
 }
-</script>
+</script> -->
+	

@@ -32,6 +32,55 @@ body {
     overflow: hidden; /* Empêche le défilement */
 }
 
+/* Écran de chargement en fond noir */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Toujours au-dessus */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Affichage du loading */
+#loading-screen.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Demi-cercle tournant */
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid transparent;
+    border-top: 6px solid cyan; /* Couleur effet néon */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Texte "LOADING..." */
+.loading-text {
+    font-family: 'Press Start 2P', cursive;
+    color: cyan;
+    margin-top: 10px;
+    text-shadow: 0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan;
+    font-size: 18px;
+}
+
 .video-background {
     position: fixed;
     top: 0;
@@ -41,37 +90,6 @@ body {
     object-fit: cover; /* Ajuste la vidéo pour couvrir tout l'écran */
     z-index: -1; /* Place la vidéo derrière tout le contenu */
 }
-
-/* body {
-    background: url('../img/fond_1.gif') no-repeat center center fixed;
-    background-size: cover;
-	background-position: center;
-    margin: 0;
-    padding: 0;
-} */
-
-/* #scoreBoard {
-    font-family: 'TRON', sans-serif; /* Police TRON */
-    /* font-size: 50px; Ajuster selon la taille souhaitée */
-    /* color: white; Couleur par défaut */
-    /* text-align: center; Centre le texte */
-    /* white-space: nowrap; /* Empêche le texte de passer à la ligne */
-    /* position: absolute; Position absolue */
-    /* top: 10px; Distance par rapport au haut */
-    /* left: 0; Aligne à gauche */
-    /* width: 1000vw; Utilise toute la largeur de la fenêtre */
-    /* overflow: visible; Assure que rien n'est coupé */
-    /* z-index: 10; Assure que l'élément est visible */ 
-/* } */
-
-/* .score { */
-    /* text-shadow: 
-        0 0 5px #0ff, 
-        0 0 10px #0ff, 
-        0 0 20px #0ff, 
-        0 0 40px cyan, 
-        0 0 80px cyan;
-/* } */
 
 #player1 {
     color: blue; 

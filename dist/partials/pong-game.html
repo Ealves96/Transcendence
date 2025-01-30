@@ -47,10 +47,17 @@
     </style>
 </head>
 <body>
-	<video autoplay loop muted playsinline class="video-background">
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p class="loading-text">LOADING...</p>
+    </div>
+
+    <!-- Vidéo de fond -->
+    <video autoplay loop muted playsinline class="video-background" id="bg-video">
         <source src="https://cdn.pixabay.com/video/2024/08/18/227152_large.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas les vidéos HTML5.
     </video>
+
     <section id="pong-game">
         <div id="scoreBoard">
             <div class="player">
@@ -58,32 +65,57 @@
                 <span class="player-name">Joueur 2</span>
             </div>
             <div class="score">
-                <span class="player-score">0</span>
-                <span class="player-score">0</span>
+                <span id="player1-score" class="player-score">0</span>
+                <span id="player2-score" class="player-score">0</span>
             </div>
         </div>
         <canvas id="pongCanvas"></canvas>
     </section>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Logique pour mettre à jour les scores
-            const scores = { player1: 0, player2: 0 };
+            console.log("Chargement du Pong...");
 
-    setInterval(() => {
-        scores.player1 += Math.floor(Math.random() * 2);
-        scores.player2 += Math.floor(Math.random() * 2);
+            // Afficher l'écran de chargement
+            const loadingScreen = document.getElementById("loading-screen");
+            loadingScreen.classList.add("show");
 
-        updateScoreBoard(scores.player1, scores.player2);
-    }, 2000);
+            // Vérifier quand la vidéo est prête
+            const bgVideo = document.getElementById("bg-video");
+            bgVideo.oncanplaythrough = () => {
+                console.log("Vidéo de fond chargée !");
+                checkLoadingComplete();
+            };
 
-    function updateScoreBoard(player1, player2) {
-        const player1Span = document.getElementById('player1');
-        const player2Span = document.getElementById('player2');
-        
-        player1Span.innerText = `Joueur 1 : ${player1}`;
-        player2Span.innerText = `Joueur 2 : ${player2}`;
-    }
+            // Vérifier quand le Pong est prêt
+            setTimeout(() => {
+                try {
+                    initPongGame();
+                    console.log("Pong chargé !");
+                    checkLoadingComplete();
+                } catch (error) {
+                    console.error("Erreur lors du lancement du Pong :", error);
+                }
+            }, 500); // Petit délai pour fluidité
         });
+
+        // Fonction pour cacher l'écran de chargement une fois tout prêt
+        function checkLoadingComplete() {
+            const loadingScreen = document.getElementById("loading-screen");
+            setTimeout(() => {
+                loadingScreen.classList.remove("show");
+            }, 500);
+        }
+
+        // Gestion des scores (exemple de mise à jour automatique)
+        setInterval(() => {
+            const player1Score = document.getElementById("player1-score");
+            const player2Score = document.getElementById("player2-score");
+
+            // Simule une mise à jour des scores
+            player1Score.innerText = Math.floor(Math.random() * 10);
+            player2Score.innerText = Math.floor(Math.random() * 10);
+        }, 2000);
     </script>
 </body>
 </html>
