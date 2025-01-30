@@ -158,7 +158,7 @@ function startGame(mode) {
             alert("Mode multijoueur en cours de développement !");
             loadingScreen.classList.remove("show"); // Cache le loading si pas de jeu
         }
-    }, 1000); // Temps d'affichage du loading avant de charger le jeu
+    }, 500); // Temps d'affichage du loading avant de charger le jeu
 }
 
 
