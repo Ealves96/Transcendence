@@ -1,0 +1,70 @@
+<video autoplay loop muted playsinline class="video-background">
+    <source src="img/fond_4.mp4" type="video/mp4">
+    Votre navigateur ne supporte pas les vidéos HTML5.
+</video>
+
+<section id="home-screen">
+    <div class="game-selection">
+        <h1>How many pilots for this mission</h1>
+        <button onclick="startGame('solo')">1 Pilot</button>
+        <button onclick="startGame('duo')">2 Pilots</button>
+        <button onclick="startGame('multi')" disabled>4 Pilots</button>
+    </div>
+</section>
+
+<style>
+body {
+    background: url('./img/fond_3.mp4') no-repeat center center fixed;
+    background-size: cover;
+}
+
+#home-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.game-selection {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+}
+
+button {
+    background: #00ffff;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: gray;
+}
+</style>
+
+<script>
+function startGame(mode) {
+    if (mode === 'solo') {
+        loadSection('pong-game')
+            .then(() => {
+                console.log("Chargement du Pong solo...");
+                try {
+                    initPongGame(); // Lance le jeu après le chargement
+                } catch (error) {
+                    console.error("Erreur lors du lancement du Pong solo:", error);
+                }
+            });
+    } else if (mode === 'duo') {
+        alert("Le mode 2 joueurs n'est pas encore disponible !");
+    } else {
+        alert("Mode multijoueur en cours de développement !");
+    }
+}
+</script>

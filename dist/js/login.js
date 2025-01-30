@@ -41,7 +41,7 @@ function handleLogin(event) {
         displayUsername();
 
         // Charge le jeu Pong
-        loadSection('pong-game');
+        loadSection('home');
     } else {
         alert('Veuillez entrer un pseudo et un mot de passe valides.');
     }

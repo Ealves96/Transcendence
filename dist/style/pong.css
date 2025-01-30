@@ -27,12 +27,28 @@ html, body {
 }
 
 body {
-    background: url('../img/fond_2.gif') no-repeat center center fixed;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Empêche le défilement */
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Ajuste la vidéo pour couvrir tout l'écran */
+    z-index: -1; /* Place la vidéo derrière tout le contenu */
+}
+
+/* body {
+    background: url('../img/fond_1.gif') no-repeat center center fixed;
     background-size: cover;
 	background-position: center;
     margin: 0;
     padding: 0;
-}
+} */
 
 /* #scoreBoard {
     font-family: 'TRON', sans-serif; /* Police TRON */
