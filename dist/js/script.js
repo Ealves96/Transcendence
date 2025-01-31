@@ -42,10 +42,16 @@ function loadHTML(url, elementId) {
             return response.text();
         })
         .then(data => {
-            document.getElementById(elementId).innerHTML = data;
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = data;
+            } else {
+                console.error(`❌ Élément introuvable : ${elementId}`);
+            }
         })
-        .catch(error => console.error('Error loading HTML:', error));
+        .catch(error => console.error('❌ Erreur de chargement HTML:', error));
 }
+
 
 function loadSection(section) {
     const sectionMap = {
