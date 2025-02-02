@@ -37,7 +37,7 @@
 
 /* 🔹 Effet néon sur le titre */
 .modal-title {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Audiowide', cursive;
     color: cyan;
     text-shadow: 0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan;
 }
@@ -62,7 +62,7 @@
     border: none;
     padding: 10px 20px;
     font-size: 16px;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Audiowide', cursive;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
@@ -79,7 +79,7 @@
     color: cyan;
     padding: 10px 20px;
     font-size: 16px;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Audiowide', cursive;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }

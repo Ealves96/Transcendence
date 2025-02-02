@@ -42,8 +42,8 @@
 
 /* 📌 S'assurer que le contenu reste au-dessus */
 .game-selection h1 {
-    font-family: 'Press Start 2P', cursive !important;
-    font-size: 20px;
+    font-family: 'Audiowide', cursive !important;
+    font-size: 30px;
     text-align: center;
     color: rgb(0, 255, 255);
     margin-bottom: 60px; /* 🔥 Ajoute un espace entre le texte et les boutons */
@@ -59,8 +59,8 @@
     height: 170px;
     padding: 0;
     margin: 10px;
-    font-size: 20px;
-    font-family: 'Press Start 2P', cursive;
+    font-size: 30px;
+    font-family: 'Audiowide', cursive;
     background: linear-gradient(to top, rgb(0, 200, 200), rgb(0, 255, 255));
     border: 3px solid rgba(0, 255, 255, 0.9);
     color: rgb(53, 54, 54);
@@ -122,7 +122,7 @@
     border-radius: 10px;
     text-align: center;
     color: cyan;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Audiowide', cursive;
     box-shadow: 0 0 15px cyan;
 }
 
