@@ -110,10 +110,10 @@ body {
     }
 }
 
-@font-face {
+/* @font-face {
     font-family: 'TronFont';
     src: url('../fonts/Chau_Philomene_One/Tron-JOAa.ttf') format('truetype');;
-}
+} */
 
 
 @keyframes pulse {

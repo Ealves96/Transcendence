@@ -78,13 +78,6 @@ function addLights(scene) {
 
 // Terrain (prolongé pour un effet de profondeur)
 function addFloor(scene) {
-    // const textureLoader = new THREE.TextureLoader();
-
-    // Charge une texture bleu foncé
-	// const floorTexture = textureLoader.load('./img/fond_bleu.jpg');
-	// floorTexture.wrapS = THREE.RepeatWrapping;
-	// floorTexture.wrapT = THREE.RepeatWrapping;
-	// floorTexture.repeat.set(10, 10); // Répétition pour l'effet de profondeur
 
 	const floorMaterial = new THREE.MeshStandardMaterial({
 		// map: floorTexture, // Applique la texture
@@ -307,12 +300,6 @@ function updateBallPosition() {
         ball.userData.speed.x *= -1; // Inversion de la direction horizontale
     }
 
-    //POUR COMPTER LES POINTS SE SERVIR DE CA
-    // Collision avec les murs haut et bas (si nécessaire)
-    // if (ball.position.z > 50 || ball.position.z < -50) {
-    //     ball.userData.speed.z *= -1; // Inversion de la direction verticale
-    // }
-
     // Collision avec la raquette du joueur
     if (
         ball.position.z > paddles.leftPaddle.position.z - 2 &&
@@ -409,3 +396,4 @@ function updateScoreBoard() {
     const scoreBoard = document.getElementById('scoreBoard');
     scoreBoard.innerText = `Joueur 1: ${scores.player1} - ${scores.player2} : Joueur 2`;
 }
+
