@@ -3,9 +3,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
+    height: auto; /* ✅ Ne recouvre plus tout l'écran */
+    width: auto;
+    position: absolute; /* ✅ Évite que cela bloque tout l'écran */
+    top: 30%; /* ✅ Ajuste la position pour ne pas couvrir la sidebar */
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none; /* ✅ Permet les clics en dehors */
 }
 
 /* 📌 Fenêtre carrée et stylée */
@@ -22,7 +26,8 @@
     text-align: center;
     box-shadow: 0 0 50px 15px rgba(0, 255, 255, 1),
                 0 0 100px 30px rgba(0, 255, 255, 0.6);
-    z-index: 1; /* Assure que le texte reste au-dessus */
+	z-index: 10; /* ✅ Toujours au-dessus mais pas bloquant */
+	pointer-events: auto; /* ✅ Les clics fonctionnent ici */
 }
 
 /* Ajoute un fond semi-transparent sans affecter le texte et les boutons */
@@ -33,8 +38,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgb(53, 54, 54); /* ✅ Couleur de fond */
-    opacity: 0.8; /* ✅ Rend uniquement le fond transparent */
+    background: rgb(3, 3, 3); /* ✅ Couleur de fond */
+    opacity: 0.2; /* ✅ Rend uniquement le fond transparent */
     border-radius: 20px; /* ✅ Garde l'arrondi */
     z-index: -1; /* ✅ Place ce fond derrière le texte et les boutons */
 }
@@ -66,6 +71,7 @@
     color: rgb(53, 54, 54);
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+	pointer-events: all;
     box-shadow: 0 5px rgba(0, 255, 255, 0.8);
     transform: translateY(0);
     text-align: center;
@@ -100,20 +106,6 @@
     border: 3px solid rgba(0, 255, 255, 0.9);
 	transform: translateY(0);
     color: rgb(53, 54, 54);
-}
-
-/* page en arriere plan de la selectiond de jeu */
-#home-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    /* background: url('../img/fond_3.mp4') no-repeat center center fixed; */
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .menu-container {

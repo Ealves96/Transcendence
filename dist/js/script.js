@@ -12,8 +12,8 @@ function sendPlayerPosition(position) {
 
 document.addEventListener("DOMContentLoaded", function () {
     loadHTML('partials/header.html', 'header-placeholder');
-	loadHTML('partials/home.html', 'main-content');
     loadHTML('partials/sidebar.html', 'sidebar-placeholder');
+	loadHTML('partials/home.html', 'main-content');
     loadHTML('partials/footer.html', 'footer-placeholder');
     loadHTML('partials/login-modal.html', 'login-modal-placeholder')
         .then(() => {
@@ -22,16 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const loginModal = new bootstrap.Modal(modalElement, { backdrop: 'static', keyboard: false });
             loginModal.show(); //desactive l'affichage de la fenetre de connexion
         });
-	// Attendre que la page Home soit bien chargée avant d'ajouter les événements
-    document.addEventListener("click", function (event) {
-        if (event.target.id === "solo-btn") {
-            startGame("solo");
-        } else if (event.target.id === "duo-btn") {
-            startGame("duo");
-        } else if (event.target.id === "multi-btn") {
-            startGame("multi");
-        }
-    });
 });
 
 function loadHTML(url, elementId) {
@@ -55,90 +45,52 @@ function loadHTML(url, elementId) {
 
 function loadSection(section) {
     const sectionMap = {
-        'home': 'partials/home.html',
-        'friends': 'partials/friends.html',
+		'friends': 'partials/friends.html',
         'ranking': 'partials/ranking.html',
         'chat': 'partials/chat.html',
         'login': 'partials/login-modal.html',
         'pong-game': 'partials/pong-game.html',
         'user-profile': 'partials/user-profile.html',
-        'friend-request': 'partials/friend-request.html'
+        'friend-request': 'partials/friend-request.html',
+        'home': 'partials/home.html'
     };
 
-    if (!sectionMap[section]) {
-        console.error(`❌ Section inconnue : ${section}`);
-        return;
-    }
-
-    console.log(`📂 Chargement de la section : ${section}`);
-
-    // Charger le contenu de la section
-    loadHTML(sectionMap[section], 'main-content')
-        .then(() => {
-            switch (section) {
-                case 'home':
-                    console.log('🏠 Accueil chargé.');
-                    break;
-
-                case 'pong-game':
-                    console.log('🎮 Chargement du Pong...');
-
-                    // Vérifier si l'élément de chargement existe
-                    const loadingScreen = document.getElementById("loading-screen");
-                    if (loadingScreen) {
-                        loadingScreen.classList.add("show"); // Afficher le loading
-                    } else {
-                        console.warn("⚠️ L'élément #loading-screen est introuvable !");
-                    }
-
-                    setTimeout(() => {
-                        try {
-                            initPongGame(); // Démarrer le Pong après le chargement
-                            console.log("✅ Pong lancé avec succès !");
+    if (sectionMap[section]) {
+        loadHTML(sectionMap[section], 'main-content')
+            .then(() => {
+                switch (section) {
+                    case 'pong-game':
+                        console.log('Appel de InitPongGame');
+                         try {
+                            initPongGame();
                         } catch (error) {
-                            console.error("❌ Erreur lors du lancement du Pong :", error);
+                            console.error('Erreur lors de l\'initialisation du jeu Pong:', error);
                         }
-
-                        // Masquer l'écran de chargement après 1 seconde
-                        if (loadingScreen) {
-                            setTimeout(() => {
-                                loadingScreen.classList.remove("show");
-                            }, 1000);
-                        }
-                    }, 500); // Ajout d'une attente avant l'initiation
-                    break;
-
-                case 'chat':
-                    initChat();
-                    break;
-
-                case 'ranking':
-                    initRanking();
-                    break;
-
-                case 'friends':
-                    initFriends();
-                    break;
-
-                case 'user-profile':
-                    loadUserProfile();
-                    break;
-
-                case 'login':
-                    showLoginModal();
-                    break;
-
-                case 'friend-request':
-                    initFriendRequest();
-                    break;
-
-                default:
-                    console.log('ℹ️ Section sans initialisation spécifique.');
-            }
-        })
-        .catch(error => {
-            console.error(`❌ Erreur lors du chargement de la section ${section}:`, error);
-        });
+                        break;
+                    case 'chat':
+                        initChat();
+                        break;
+                    case 'ranking':
+                        initRanking();
+                        break;
+                    case 'friends':
+                        initFriends();
+                        break;
+                    case 'user-profile':
+                        loadUserProfile();
+                        break;
+                    case 'login':
+                        showLoginModal();
+                        break;
+                    case 'friend-request':
+                        initFriendRequest();
+                        break;
+                    default:
+                        console.log('Section sans initialisation spécifique');
+                }
+            })
+            .catch(error => console.error('Error loading section:', error));
+    }
 }
 
 
