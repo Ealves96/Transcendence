@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadHTML('partials/header.html', 'header-placeholder');
     loadHTML('partials/sidebar.html', 'sidebar-placeholder');
 	loadHTML('partials/home.html', 'main-content');
+	loadHTML('partials/user-profile.html', 'main-content')
     loadHTML('partials/footer.html', 'footer-placeholder');
     loadHTML('partials/login-modal.html', 'login-modal-placeholder')
         .then(() => {
