@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadHTML('partials/header.html', 'header-placeholder');
     loadHTML('partials/sidebar.html', 'sidebar-placeholder');
 	loadHTML('partials/home.html', 'main-content');
-	loadHTML('partials/user-profile.html', 'main-content')
+	// loadHTML('partials/user-profile.html', 'main-content');
     loadHTML('partials/footer.html', 'footer-placeholder');
     loadHTML('partials/login-modal.html', 'login-modal-placeholder')
         .then(() => {
@@ -37,62 +37,101 @@ function loadHTML(url, elementId) {
             if (element) {
                 element.innerHTML = data;
             } else {
-                console.error(`❌ Élément introuvable : ${elementId}`);
+                console.error(`Élément introuvable : ${elementId}`);
             }
         })
-        .catch(error => console.error('❌ Erreur de chargement HTML:', error));
+        .catch(error => console.error('Erreur de chargement HTML:', error));
 }
 
 
 function loadSection(section) {
     const sectionMap = {
-		'friends': 'partials/friends.html',
+        'home': 'partials/home.html',
+        'friends': 'partials/friends.html',
         'ranking': 'partials/ranking.html',
         'chat': 'partials/chat.html',
         'login': 'partials/login-modal.html',
         'pong-game': 'partials/pong-game.html',
         'user-profile': 'partials/user-profile.html',
-        'friend-request': 'partials/friend-request.html',
-        'home': 'partials/home.html'
+        'friend-request': 'partials/friend-request.html'
     };
 
-    if (sectionMap[section]) {
-        loadHTML(sectionMap[section], 'main-content')
-            .then(() => {
-                switch (section) {
-                    case 'pong-game':
-                        console.log('Appel de InitPongGame');
-                         try {
-                            initPongGame();
-                        } catch (error) {
-                            console.error('Erreur lors de l\'initialisation du jeu Pong:', error);
-                        }
-                        break;
-                    case 'chat':
-                        initChat();
-                        break;
-                    case 'ranking':
-                        initRanking();
-                        break;
-                    case 'friends':
-                        initFriends();
-                        break;
-                    case 'user-profile':
-                        loadUserProfile();
-                        break;
-                    case 'login':
-                        showLoginModal();
-                        break;
-                    case 'friend-request':
-                        initFriendRequest();
-                        break;
-                    default:
-                        console.log('Section sans initialisation spécifique');
-                }
-            })
-            .catch(error => console.error('Error loading section:', error));
+    if (!sectionMap[section]) {
+        console.error(`Section inconnue : ${section}`);
+        return;
     }
+
+    console.log(`Chargement de la section : ${section}`);
+
+    // Charger le contenu de la section
+    loadHTML(sectionMap[section], 'main-content')
+        .then(() => {
+            switch (section) {
+                case 'home':
+                    console.log('Accueil chargé.');
+                    break;
+
+                case 'pong-game':
+                    console.log('Chargement du Pong...');
+
+                    // Vérifier si l'élément de chargement existe
+                    const loadingScreen = document.getElementById("loading-screen");
+                    if (loadingScreen) {
+                        loadingScreen.classList.add("show"); // Afficher le loading
+                    } else {
+                        console.warn("⚠️ L'élément #loading-screen est introuvable !");
+                    }
+
+                    setTimeout(() => {
+                        try {
+                            initPongGame(); // Démarrer le Pong après le chargement
+                            console.log("Pong lancé avec succès !");
+                        } catch (error) {
+                            console.error("Erreur lors du lancement du Pong :", error);
+                        }
+
+                        // Masquer l'écran de chargement après 1 seconde
+                        if (loadingScreen) {
+                            setTimeout(() => {
+                                loadingScreen.classList.remove("show");
+                            }, 1000);
+                        }
+                    }, 500); // Ajout d'une attente avant l'initiation
+                    break;
+
+                case 'chat':
+                    initChat();
+                    break;
+
+                case 'ranking':
+                    initRanking();
+                    break;
+
+                case 'friends':
+                    initFriends();
+                    break;
+
+                case 'user-profile':
+                    loadUserProfile();
+                    break;
+
+                case 'login':
+                    showLoginModal();
+                    break;
+
+                case 'friend-request':
+                    initFriendRequest();
+                    break;
+
+                default:
+                    console.log('ℹSection sans initialisation spécifique.');
+            }
+        })
+        .catch(error => {
+            console.error(`Erreur lors du chargement de la section ${section}:`, error);
+        });
 }
+
 
 
 function startGame(mode) {

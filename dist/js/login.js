@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Stocker la connexion
         localStorage.setItem("isAuthenticated", "true");
-        console.log("✅ Authentification enregistrée !");
+        console.log("Authentification enregistrée !");
         console.log("isAuthenticated:", localStorage.getItem("isAuthenticated"));
 
 
@@ -42,13 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Fonction pour afficher la modale de connexion
 function showLoginModal() {
-    console.log("📌 showLoginModal() a été appelée !");
+    console.log("showLoginModal() a été appelée !");
     const modalElement = document.getElementById("login-modal");
     if (modalElement) {
         const loginModal = new bootstrap.Modal(modalElement, { backdrop: 'static', keyboard: false });
         loginModal.show();
     } else {
-        console.error("❌ La modale de connexion n'a pas été trouvée !");
+        console.error("La modale de connexion n'a pas été trouvée !");
     }
 }
 
@@ -57,16 +57,18 @@ function hideLoginModal() {
     const loginModal = document.getElementById("login-modal");
     if (loginModal) {
         loginModal.style.display = "none"; // Cache la fenêtre de connexion
-        console.log("✅ La fenêtre de connexion a été cachée !");
+        console.log("La fenêtre de connexion a été cachée !");
     }
 
     // Afficher le contenu restreint
     const restrictedContent = document.getElementById("restricted-content");
+    console.log("Vérification de #restricted-content :", restrictedContent);
+    
     if (restrictedContent) {
         restrictedContent.style.display = "block";
-        console.log("✅ Le contenu restreint a été affiché !");
+        console.log("Le contenu restreint a été affiché !");
     } else {
-        console.error("❌ Impossible d'afficher le contenu restreint !");
+        console.error("Impossible d'afficher le contenu restreint !");
     }
 }
 

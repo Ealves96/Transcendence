@@ -1,15 +1,15 @@
-/* 📌 Centrage parfait */
+/* Centrage parfait */
 .game-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: auto; /* ✅ Ne recouvre plus tout l'écran */
+    height: auto; /*Ne recouvre plus tout l'écran */
     width: auto;
-    position: absolute; /* ✅ Évite que cela bloque tout l'écran */
-    top: 30%; /* ✅ Ajuste la position pour ne pas couvrir la sidebar */
+    position: absolute; /*Évite que cela bloque tout l'écran */
+    top: 30%; /*Ajuste la position pour ne pas couvrir la sidebar */
     left: 50%;
     transform: translateX(-50%);
-    pointer-events: none; /* ✅ Permet les clics en dehors */
+    pointer-events: none; /*Permet les clics en dehors */
 }
 
 /* 📌 Fenêtre carrée et stylée */
@@ -26,8 +26,8 @@
     text-align: center;
     box-shadow: 0 0 50px 15px rgba(0, 255, 255, 1),
                 0 0 100px 30px rgba(0, 255, 255, 0.6);
-	z-index: 10; /* ✅ Toujours au-dessus mais pas bloquant */
-	pointer-events: auto; /* ✅ Les clics fonctionnent ici */
+	z-index: 10; /* Toujours au-dessus mais pas bloquant */
+	pointer-events: auto; /* Les clics fonctionnent ici */
 }
 
 /* Ajoute un fond semi-transparent sans affecter le texte et les boutons */
@@ -38,24 +38,24 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgb(3, 3, 3); /* ✅ Couleur de fond */
-    opacity: 0.2; /* ✅ Rend uniquement le fond transparent */
-    border-radius: 20px; /* ✅ Garde l'arrondi */
-    z-index: -1; /* ✅ Place ce fond derrière le texte et les boutons */
+    background: rgb(3, 3, 3); /*Couleur de fond */
+    opacity: 0.2; /*Rend uniquement le fond transparent */
+    border-radius: 20px; /*Garde l'arrondi */
+    z-index: -1; /*Place ce fond derrière le texte et les boutons */
 }
 
 
-/* 📌 S'assurer que le contenu reste au-dessus */
+/* S'assurer que le contenu reste au-dessus */
 .game-selection h1 {
     font-family: 'Audiowide', cursive !important;
     font-size: 30px;
     text-align: center;
     color: rgb(0, 255, 255);
-    margin-bottom: 60px; /* 🔥 Ajoute un espace entre le texte et les boutons */
-    transform: translateY(-20px); /* 🔥 Fait remonter le texte */
+    margin-bottom: 60px; /* Ajoute un espace entre le texte et les boutons */
+    transform: translateY(-20px); /* Fait remonter le texte */
 	text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 
                  0 0 20px rgba(0, 255, 255, 0.6), 
-                 0 0 30px rgba(0, 255, 255, 0.4); /* ✅ Effet de brillance */
+                 0 0 30px rgba(0, 255, 255, 0.4); /* Effet de brillance */
     animation: glow 1.5s infinite alternate; 
 }
 
@@ -78,13 +78,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px; /* 🔥 Arrondi les angles */
+    border-radius: 20px; /* Arrondi les angles */
 }
 
-/* 🔥 Effet "appuyé" sur le bouton */
+/* Effet "appuyé" sur le bouton */
 .game-selection button:active {
-    transform: translateY(5px); /* 🔽 Bouton enfoncé */
-    box-shadow: 0 2px rgba(0, 255, 255, 0.6); /* ✅ Réduction de l'ombre */
+    transform: translateY(5px); /* Bouton enfoncé */
+    box-shadow: 0 2px rgba(0, 255, 255, 0.6); /* Réduction de l'ombre */
 }
 
 .button-container {
@@ -95,9 +95,9 @@
 
 .game-selection button:hover {
     background: rgba(0, 255, 255);
-    box-shadow: 0 0 25px 8px rgba(0, 255, 255, 0.9); /* 🔥 Élargit l'effet lumineux */
-    transform: scale(1.05); /* 🔥 Légère augmentation de la taille pour plus d'impact */
-    transition: all 0.3s ease-in-out; /* ✅ Rend l'effet plus fluide */
+    box-shadow: 0 0 25px 8px rgba(0, 255, 255, 0.9); /* Élargit l'effet lumineux */
+    transform: scale(1.05); /* Légère augmentation de la taille pour plus d'impact */
+    transition: all 0.3s ease-in-out; /* Rend l'effet plus fluide */
 }
 
 /* 📌 Désactivation d'un bouton (ex: 4 pilotes) */
