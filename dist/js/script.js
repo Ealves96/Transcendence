@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Afficher la modal de connexion automatiquement
             const modalElement = document.getElementById('login-modal');
             const loginModal = new bootstrap.Modal(modalElement, { backdrop: 'static', keyboard: false });
+            // DECOMMENTER :
             loginModal.show(); //desactive l'affichage de la fenetre de connexion
         });
 });
@@ -94,7 +95,7 @@ function loadSection(section) {
                         if (loadingScreen) {
                             setTimeout(() => {
                                 loadingScreen.classList.remove("show");
-                            }, 1000);
+                            }, 400);
                         }
                     }, 500); // Ajout d'une attente avant l'initiation
                     break;

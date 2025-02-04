@@ -1,6 +1,7 @@
 let scene, camera, renderer, paddles, ball;
 let scores = { player1: 0, player2: 0 }; // Scores des deux joueurs
 let isGamePaused = false; // État d'arrêt du jeu
+let lastScorer = null; // Dernier joueur à avoir marqué
 
 function initPongGame() {
     console.log("Initialisation du Pong Game");
@@ -11,11 +12,13 @@ function initPongGame() {
         return;
     }
 
+    resizeCanvas();
+
     // Scène
     scene = new THREE.Scene();
 
     // Caméra légèrement inclinée
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, 0.1, 2000);
     camera.position.set(0, 25, 190); // Ajustement pour une vue plus horizontale
     camera.lookAt(0, 0, 0);
 
@@ -26,7 +29,8 @@ function initPongGame() {
         alpha: true
     });
     renderer.setClearColor( 0x000000, 0 );
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(canvas.width, canvas.height);
+    // renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
 
     // Lumières
@@ -81,28 +85,46 @@ function addFloor(scene) {
 
 	const floorMaterial = new THREE.MeshStandardMaterial({
 		// map: floorTexture, // Applique la texture
-        color: new THREE.Color("rgb(15, 7, 59)"),
-		emissive: new THREE.Color("rgb(3, 3, 3)"), // Bleu foncé pour l'émission
+        color: new THREE.Color("0x00ffff"),
+		emissive: new THREE.Color("0x00ffff"), // Bleu foncé pour l'émission
 		emissiveIntensity: 1.0, // Intensité d'émission
 		transparent: true,
 		opacity: 0.8,
 	});
 
-	const floorGeometry = new THREE.PlaneGeometry(80, 200);
+	const floorGeometry = new THREE.BoxGeometry(80, 200, 10);
 	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.rotation.x = -Math.PI / 2.3; // Place le sol à plat
-	floor.position.y = 15; // Position légèrement en dessous
+	floor.position.y = 10; // Position légèrement en dessous
 	floor.receiveShadow = true; // Active la réception des ombres
 	scene.add(floor);
 }
 
+//canvas s adapte dynamiquement a la taille de l ecran
+function resizeCanvas() {
+    const canvas = document.getElementById("pongCanvas");
+    if (!canvas) {
+        console.error("Erreur : Aucun élément #pongCanvas trouvé !");
+        return;
+    }
+
+    // Utilise les dimensions HTML et non celles de la fenêtre
+    canvas.width = canvas.getAttribute("width");
+    canvas.height = canvas.getAttribute("height");
+
+    console.log(`Canvas redimensionné : ${canvas.width}x${canvas.height}`);
+}
+
+// Redimensionner au chargement et lors du redimensionnement de la fenêtre
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // Appelle une première fois la fonction pour ajuster le canvas au démarrage
 
 // Raquettes
 function addPaddles(scene) {
-    const paddleGeometry = new THREE.BoxGeometry(20, 3, 3);
+    const paddleGeometry = new THREE.BoxGeometry(20, 4, 4);
     const paddleMaterial = new THREE.MeshStandardMaterial({
-        color: 0x00ff00,
-        emissive: 0x00ff00,
+        color: 0x00008b,
+        emissive: 0x00008b,
         emissiveIntensity: 1.5,
     });
 
@@ -112,7 +134,7 @@ function addPaddles(scene) {
     scene.add(leftPaddle);
 
     const rightPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-    rightPaddle.position.set(0, 0, -110); // Adversaire éloigné
+    rightPaddle.position.set(0, 40, -110); // Adversaire éloigné
     rightPaddle.castShadow = true;
     scene.add(rightPaddle);
 
@@ -144,12 +166,12 @@ function addBall(scene) {
 
 // Murs gauche et droite
 function addWalls(scene) {
-    const neonColor = new THREE.Color(0x00ffff); // Bleu néon
-    const emissiveColor = new THREE.Color("rgb(253, 253, 253)"); // Lumière émise
+    const neonColor = new THREE.Color("rgba(2, 2, 2)");
+    const emissiveColor = new THREE.Color("0x00ffff"); // Lumière émise
 
     // Matériau principal des murs (LED brillants)
     const wallMaterial = new THREE.MeshBasicMaterial({
-        color: neonColor, // Bleu néon
+        color: 0x00ffff, // Bleu néon
         emissive: emissiveColor, // Lumière émise
         emissiveIntensity: 5.0, // Très intense
         transparent: true,
@@ -158,22 +180,22 @@ function addWalls(scene) {
 
     // Effet de lumière diffusée autour des murs
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: neonColor,
+        color: new THREE.Color("0x00ffff"), // Bleu néon
         transparent: true,
         opacity: 0.5, // Transparence pour effet "halo"
     });
 
     // Dimensions du terrain
-    const terrainLength = 3; // Profondeur du terrain (Z)
-    const wallThickness = 2; // Épaisseur des murs
-    const wallHeight = 198; // Hauteur des murs
+    const terrainLength = 35; // Hauteur des murs
+    const wallThickness = 5; // Épaisseur des murs
+    const wallHeight = 198; // Profondeur du terrain (Z)
 
     // Création des murs
     const leftWall = new THREE.Mesh(
         new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength),
         wallMaterial
     );
-    leftWall.position.set(-42, 15, 0);
+    leftWall.position.set(-42, 10, 0);
     leftWall.rotation.x = -Math.PI / 2.3; // Suivre l'angle du terrain
     scene.add(leftWall);
 
@@ -182,71 +204,47 @@ function addWalls(scene) {
         new THREE.BoxGeometry(wallThickness, wallHeight, terrainLength),
         wallMaterial
     );
-    rightWall.position.set(42, 15, 0);
+    rightWall.position.set(42, 10, 0);
     rightWall.rotation.x = -Math.PI / 2.3;
     scene.add(rightWall);
 
     // Ajouter un effet de "halo" lumineux en dupliquant les murs avec une transparence
     const leftGlow = new THREE.Mesh(
-        new THREE.BoxGeometry(wallThickness * 1.5, wallHeight * 1, terrainLength * 1.5),
+        new THREE.BoxGeometry(wallThickness * 1.2, wallHeight * 1, terrainLength * 1),
         glowMaterial
     );
-    leftGlow.position.set(-42, 15, 0);
+    leftGlow.position.set(-42, 12, 0);
     leftGlow.rotation.x = -Math.PI / 2.3;
     scene.add(leftGlow);
 
     const rightGlow = new THREE.Mesh(
-        new THREE.BoxGeometry(wallThickness * 1.5, wallHeight * 1, terrainLength * 1.5),
+        new THREE.BoxGeometry(wallThickness * 1.2, wallHeight * 1, terrainLength * 1),
         glowMaterial
     );
-    rightGlow.position.set(42, 15, 0);
+    rightGlow.position.set(42, 12, 0);
     rightGlow.rotation.x = -Math.PI / 2.3;
     scene.add(rightGlow);
 
     console.log("Murs LED ajoutés avec effet lumineux.");
 }
 
-// Lignes du terrain
+// Ligne centrale du terrain
 function addNeonLines(scene) {
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff, linewidth: 3 });
 
-    // Récupération des dimensions du sol
-    const floorWidth = 70;  // Même largeur que le sol
-    const floorDepth = 170; // Même profondeur que le sol
-    const floorY = 1; // Même hauteur que le sol
+    const floorWidth = 80;
+    const floorY = 12;
+    const floorZ = 22; 
 
-    // Inclinaison du sol
-    const floorAngle = -Math.PI / -8;
-    const sinAngle = Math.sin(floorAngle);
-    const cosAngle = Math.cos(floorAngle);
-
-    // Ajustement de la profondeur des lignes selon l'inclinaison
-    const adjustedDepthFront = floorDepth / 2 * cosAngle; // Ajuste la ligne avant
-    const adjustedDepthBack = -floorDepth / 2 * cosAngle; // Ajuste la ligne arrière
-    const adjustedHeightBack = floorDepth / 2 * sinAngle + floorY; // Ajuste la hauteur arrière
-
-    const offsetZ = 40; // Décalage pour centrer les lignes
-
-    // Ligne centrale
     const centerLineGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(floorWidth / 1.85, floorY * 18, 0),
-        new THREE.Vector3(-floorWidth / 1.85, floorY * 18, 0),
+        new THREE.Vector3(floorWidth / 2, floorY, floorZ),
+        new THREE.Vector3(-floorWidth / 2, floorY, floorZ),
     ]);
     const centerLine = new THREE.Line(centerLineGeometry, lineMaterial);
     scene.add(centerLine);
 
-    // Bordures du terrain (exactement alignées avec le sol)
-    const borderGeometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-floorWidth / 2.2, floorY, adjustedDepthFront + offsetZ), // Avant gauche
-        new THREE.Vector3(floorWidth / 2.1,floorY, adjustedDepthFront + offsetZ),  // Avant droite
-        new THREE.Vector3(floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière droite
-        new THREE.Vector3(-floorWidth / 2, adjustedHeightBack, adjustedDepthBack + offsetZ), // Arrière gauche
-        new THREE.Vector3(-floorWidth / 2.2, floorY, adjustedDepthFront + offsetZ), // Retour à avant gauche
-    ]);
-    const borderLine = new THREE.Line(borderGeometry, lineMaterial);
-    scene.add(borderLine);
+    console.log("Ligne centrale corrigée et parfaitement centrée !");
 }
-
 
 // Mouvement des raquettes
 function setupPaddleMovement(paddles) {
@@ -267,10 +265,10 @@ function setupPaddleMovement(paddles) {
 }
 
 // Mouvement de la balle
-function setupBallMovement(ball) {
+function setupBallMovement(ball, lastScorer) {
     ball.userData.speed = {
-        x: (Math.random() > 0.5 ? 0.6 : -0.6),
-        z: (Math.random() > 0.5 ? 0.8 : -0.8),
+        x: 0, // Pas de mouvement horizontal initial
+        z: lastScorer === 'player1' ? -2 : 2, // Part vers le paddle adverse
     };
 }
 
@@ -295,61 +293,54 @@ function updateBallPosition() {
     ball.position.x += ball.userData.speed.x;
     ball.position.z += ball.userData.speed.z;
 
+    // ✅ Fixation de la hauteur Y pour éviter que la balle ne descende
+    if (lastScorer !== null) {
+        ball.position.y = lastScorer === 'player1' ? 39 : 5; // Hauteur correcte
+    }
+
     // Collision avec les murs gauche et droite
     if (ball.position.x > 35 || ball.position.x < -35) {
         ball.userData.speed.x *= -1; // Inversion de la direction horizontale
     }
 
-    // Collision avec la raquette du joueur
+    // ✅ Vérifier les rebonds contre les raquettes
     if (
         ball.position.z > paddles.leftPaddle.position.z - 2 &&
         ball.position.z < paddles.leftPaddle.position.z + 1 &&
         ball.position.x >= paddles.leftPaddle.position.x - 10 &&
         ball.position.x <= paddles.leftPaddle.position.x + 10
     ) {
-        ball.userData.speed.z *= -1; // Rebond sur la raquette
-        ball.userData.speed.x += (ball.position.x - paddles.leftPaddle.position.x) * 0.1; // Angle
-        limitBallSpeed(ball); // Limite la vitesse après le rebond
-        return;
+        ball.userData.speed.z *= -1;
+        ball.userData.speed.x += (ball.position.x - paddles.leftPaddle.position.x) * 0.1;
+        ball.position.y = 5;
+        limitBallSpeed(ball);
     }
 
-    // Collision avec la raquette de l'adversaire
     if (
         ball.position.z > paddles.rightPaddle.position.z - 2 &&
         ball.position.z < paddles.rightPaddle.position.z + 1 &&
         ball.position.x >= paddles.rightPaddle.position.x - 10 &&
         ball.position.x <= paddles.rightPaddle.position.x + 10
     ) {
-        ball.userData.speed.z *= -1; // Rebond sur la raquette
-        ball.userData.speed.x += (ball.position.x - paddles.rightPaddle.position.x) * 0.1; // Angle
-        limitBallSpeed(ball); // Limite la vitesse après le rebond
-        return;
+        ball.userData.speed.z *= -1;
+        ball.userData.speed.x += (ball.position.x - paddles.rightPaddle.position.x) * 0.1;
+        ball.position.y = 39;
+        limitBallSpeed(ball);
     }
 
-    // Gestion des angles (collision combinée avec la raquette et le mur)
-    if (
-        (ball.position.x >= 40 || ball.position.x <= -40) && // Mur gauche/droite
-        ((ball.position.z > paddles.leftPaddle.position.z - 1 &&
-            ball.position.z < paddles.leftPaddle.position.z + 1) ||
-            (ball.position.z > paddles.rightPaddle.position.z - 1 &&
-            ball.position.z < paddles.rightPaddle.position.z + 1))
-    ) {
-        ball.userData.speed.z *= -1; // Rebond sur la raquette
-        ball.userData.speed.x *= -1; // Rebond sur le mur en simultané
-        limitBallSpeed(ball); // Limite la vitesse après le rebond
-    }
-
-    // Réinitialisation si la balle dépasse les limites
-    if (ball.position.z > 126) { // La balle passe derrière le joueur 1
-        scores.player2 += 1; // Point pour le joueur 2
+    // ✅ Vérifier les limites pour reset
+    if (ball.position.z > 126) { 
+        scores.player2 += 1;
+        lastScorer = 'player2'; // ✅ Stocke qui a marqué en dernier
         updateScoreBoard();
         checkForWinner();
         resetBall('player2');
         return;
     }
 
-    if (ball.position.z < -126) { // La balle passe derrière le joueur 2
-        scores.player1 += 1; // Point pour le joueur 1
+    if (ball.position.z < -126) { 
+        scores.player1 += 1;
+        lastScorer = 'player1'; // ✅ Stocke qui a marqué en dernier
         updateScoreBoard();
         checkForWinner();
         resetBall('player1');
@@ -359,23 +350,30 @@ function updateBallPosition() {
 
 function resetBall(lastScorer) {
     isGamePaused = true; // Met le jeu en pause
-   
-    // Centre les paddles
-    paddles.leftPaddle.position.set(0, 0, 115);
-    paddles.rightPaddle.position.set(0, 0, -100);
 
-    // Positionne la balle devant le paddle adverse
-    ball.position.set(0, 0, lastScorer === 'player1' ? -90 : 110);
+    //Centre les paddles
+    paddles.leftPaddle.position.set(0, 0, 115);
+    paddles.rightPaddle.position.set(0, 40, -100);
+
+    //Correction : Vérifie que lastScorer est bien défini
+    if (!lastScorer) {
+        lastScorer = 'player1'; // Par défaut, le premier joueur
+    }
+
+    //Positionne la balle devant le paddle adverse à la bonne hauteur
+    ball.position.set(0, lastScorer === 'player1' ? 39 : 5, lastScorer === 'player1' ? -90 : 110);
+    
     ball.userData.speed = { x: 0, z: 0 }; // Stoppe la balle
 
     document.addEventListener('keydown', function handleSpace(event) {
         if (event.code === 'Space') {
-            setupBallMovement(ball); // Relance la balle
+            setupBallMovement(ball, lastScorer); // Relance la balle avec un bon angle
             isGamePaused = false;
             document.removeEventListener('keydown', handleSpace); // Supprime l'écouteur
         }
     });
 }
+
 
 function resetGame() {
     scores = { player1: 0, player2: 0 }; // Réinitialise les scores

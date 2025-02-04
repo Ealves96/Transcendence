@@ -76,7 +76,7 @@ function toggleProfileOrLogin() {
     if (isLoggedIn) {
         loadSection('user-profile'); // Afficher les informations utilisateur
     } else {
-        showLoginModal(); // DECOMMENTER
+        showLoginModal();
     }
 }
 
