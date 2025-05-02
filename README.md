@@ -4,7 +4,7 @@
 
 ### Vidéo de présentation
 
-[!Vidéo de présentation](/pong.gif)
+[![Vidéo de présentation](/pong.gif)
 
 ## Architecture
 
