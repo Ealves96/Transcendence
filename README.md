@@ -4,9 +4,10 @@
 
 ### Vidéo de présentation
 
-![Vidéo de présentation](https://res.cloudinary.com/dzo1cimyr/video/upload/f_auto,fl_animated/v1744892790/f5ahjr6lmojhnt9l0q9x.webm)
-
-> Cliquez sur l'image pour voir la vidéo complète
+<video width="100%" controls>
+  <source src="https://res.cloudinary.com/dzo1cimyr/video/upload/v1744892790/f5ahjr6lmojhnt9l0q9x.webm" type="video/webm">
+  Votre navigateur ne supporte pas la lecture de vidéos.
+</video>
 
 ## Architecture
 
