@@ -4,10 +4,9 @@
 
 ### Vidéo de présentation
 
-<video width="100%" controls>
-  <source src="https://res.cloudinary.com/dzo1cimyr/video/upload/v1744892790/f5ahjr6lmojhnt9l0q9x.webm" type="video/webm">
-  Votre navigateur ne supporte pas la lecture de vidéos.
-</video>
+[![Vidéo de présentation](https://res.cloudinary.com/dzo1cimyr/video/upload/v1744892790/f5ahjr6lmojhnt9l0q9x.webm)](https://res.cloudinary.com/dzo1cimyr/video/upload/v1744892797/iun53idgpdpgublcav7r.webm)
+
+> Cliquez sur l'image pour voir la vidéo complète
 
 ## Architecture
 
