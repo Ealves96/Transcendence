@@ -1,27 +1,37 @@
-## Présentation
+<h1 align="center">
+  🚀 Transcendance
+</h1>
 
-**Transcendance** est un site web complet, architecturé en microservices, permettant la gestion d'utilisateurs, d'événements, de chat en temps réel, et de parties de jeu en local ou en ligne. Le projet est conçu pour être déployé facilement via Docker et Docker Compose.
+<p align="center">
+  <b>Application web de gestion d'utilisateurs, d'événements, de chat et de jeu en ligne, architecturée en microservices.</b>
+</p>
 
-![Vidéo de présentation](/pong.gif)
+<p align="center">
+  <img src="/pong.gif" alt="Vidéo de présentation" width="400"/>
+</p>
 
-## Architecture
+---
+
+## 🏗️ Architecture
 
 Le site est composé des services suivants :
 
-- **https_proxy** : Proxy inverse Nginx avec gestion HTTPS automatique.
-- **api_gateway** : Point d'entrée unique (Nginx) pour router les requêtes vers les différents services backend et le frontend.
-- **frontend** : Site web statique : HTML, CSS, JavaScript (vanilla), Three.js pour le rendu 3D du jeu Pong
-- **user_managment** : Service d'authentification et gestion des utilisateurs (Django + DRF).
-- **event_managment** : Service Django : gestion des événements, parties et tournois (Django, DRF, Channels/WebSockets, PostgreSQL).
-- **chat_managment** : Gestion du chat en temps réel (Django + DRF).
-- **redis_cache** : Service Redis pour la gestion du cache et des sessions.
+- **https_proxy** : Proxy inverse Nginx avec gestion HTTPS automatique 🔒
+- **api_gateway** : Point d'entrée unique (Nginx) pour router les requêtes vers les différents services backend et le frontend 🌐
+- **frontend** : Site web statique : HTML, CSS, JavaScript (vanilla), Three.js pour le rendu 3D du jeu Pong 🎮
+- **user_managment** : Service d'authentification et gestion des utilisateurs (Django + DRF) 👤
+- **event_managment** : Service Django : gestion des événements, parties et tournois (Django, DRF, Channels/WebSockets, PostgreSQL) 🏆
+- **chat_managment** : Gestion du chat en temps réel (Django + DRF) 💬
+- **redis_cache** : Service Redis pour la gestion du cache et des sessions ⚡
 
-## Lancement
+---
+
+## 🚦 Lancement
 
 ### Prérequis
 
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- [Docker](https://www.docker.com/) 🐳
+- [Docker Compose](https://docs.docker.com/compose/) ⚙️
 
 ### Lancer le site
 
@@ -31,18 +41,18 @@ make
 
 > **Note :**  
 > Pour accéder à l'application, ouvrez votre navigateur et rendez-vous à l'adresse affichée après "API Gateway", par exemple :  
-> [https://192.168.1.146:8443]
->  
-> Cette adresse correspond à l'IP locale de votre machine. 
+> [https://192.168.1.146:8443](https://192.168.1.146:8443)  
+> Cette adresse correspond à l'IP locale de votre machine.
 
-
-### Arrêter l'application
+### Arrêter le site
 
 ```bash
 make clean
 ```
 
-## Structure du dépôt
+---
+
+## 🗂️ Structure du dépôt
 
 ```
 .
@@ -59,20 +69,19 @@ make clean
 └── README.md            # Présentation du projet
 ```
 
-## Fonctionnalités principales
+---
 
-- **Authentification JWT** et gestion des utilisateurs
-- **Gestion d'amis, relations, classement**
-- **Création et gestion d'événements, parties solo/duo/multi, tournois**
-- **Chat en temps réel** entre utilisateurs
-- **Interface web moderne** et responsive
-- **Proxy HTTPS automatique** (certificats auto-signés pour dev)
-- **Cache Redis** pour les performances
+## ✨ Fonctionnalités principales
 
+- 🔐 **Authentification JWT** et gestion des utilisateurs
+- 🏅 **Gestion d'amis, relations, classement**
+- 🎮 **Création et gestion d'événements, parties solo/duo/multi, tournois**
+- 💬 **Chat en temps réel** entre utilisateurs
+- 🖥️ **Interface web moderne** et responsive
+- 🔒 **Proxy HTTPS automatique** (certificats auto-signés pour dev)
+- ⚡ **Cache Redis** pour les performances
 
-## Développement
-
-Chaque service possède son propre `Dockerfile` et peut être lancé indépendamment pour le développement. 
+---
 
 ## 🛠️ Technologies & Outils utilisés
 
