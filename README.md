@@ -2,7 +2,7 @@
 
 **ft_transcendance** est une application web complète, architecturée en microservices, permettant la gestion d'utilisateurs, d'événements, de chat en temps réel, et de parties de jeu en ligne. Le projet est conçu pour être déployé facilement via Docker et Docker Compose, garantissant une séparation claire des responsabilités et une scalabilité optimale.
 
-[![Vidéo de présentation](/pong.gif)
+![Vidéo de présentation](/pong.gif)
 
 ## Architecture
 
