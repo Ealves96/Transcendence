@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="/pong.gif" alt="Vidéo de présentation" width="400"/>
+  <img src="/pong.gif" alt="Vidéo de présentation" width="800"/>
 </p>
 
 ---
